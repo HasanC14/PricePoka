@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
+
+:root {
+  --primary-color: #4763ac;
+  --secondary-color: #bcd2ea;
+}
+
+body {
+  font-family: "Unbounded", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: var(--secondary-color);
+}
+.Quicksand {
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: var(--secondary-color);
+}
+
+.bg-prime {
+  border: 2px solid;
+  background-color: var(--primary-color);
+}
+.border-prime {
+  border-color: var(--primary-color);
+}
+.bg-second {
+  background-color: var(--secondary-color);
+}
+.text-prime {
+  color: var(--primary-color);
+}
+.text-second {
+  color: var(--secondary-color);
+}
+
+textarea::-webkit-scrollbar {
+  width: 10px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: var(--primary-color);
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: var(--secondary-color);
+  border-radius: 10px;
+  border: 2px solid var(--primary-color);
+  cursor: grab;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.placeholder-pulse::placeholder {
+  animation: pulse 2s infinite;
+}

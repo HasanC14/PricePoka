@@ -1,0 +1,16 @@
+{
+  "name": "pricechecker",
+  "version": "1.0.0",
+  "description": "Compare PC Part Prices Instantly",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "puppeteer": "^22.11.0"
+  }
+}

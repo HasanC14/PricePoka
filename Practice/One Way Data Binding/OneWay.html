@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One Way Data Binding</title>
+    <style>
+      form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <div>
+        <label for="username">Username:</label><br />
+        <input type="text" id="username" /><br />
+
+        <label for="email">Email:</label><br />
+        <input type="email" id="email" /><br />
+
+        <label for="password">Password:</label><br />
+        <input type="password" id="password" /><br />
+      </div>
+    </form>
+
+    <h2>Username: <span id="username-display"></span></h2>
+    <h2>Email: <span id="email-display"></span></h2>
+    <h2>Password: <span id="password-display"></span></h2>
+  </body>
+  <script>
+    let username = "";
+    let email = "";
+    let password = "";
+
+    function updateData(event) {
+      const { id, value } = event.target;
+
+      if (id === "username") {
+        username = value;
+      } else if (id === "email") {
+        email = value;
+      } else if (id === "password") {
+        password = value;
+      }
+    }
+
+    const usernameInput = document.getElementById("username");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    usernameInput.addEventListener("input", updateData);
+    emailInput.addEventListener("input", updateData);
+    passwordInput.addEventListener("input", updateData);
+
+    function updateUI() {
+      const usernameDisplay = document.getElementById("username-display");
+      const emailDisplay = document.getElementById("email-display");
+      const passwordDisplay = document.getElementById("password-display");
+
+      usernameDisplay.textContent = username;
+      emailDisplay.textContent = email;
+      passwordDisplay.textContent = password;
+    }
+
+    setInterval(updateUI, 100);
+  </script>
+</html>
