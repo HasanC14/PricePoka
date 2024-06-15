@@ -1,8 +1,10 @@
 const express = require("express");
 const puppeteer = require("puppeteer");
 
+const cors = require("cors");
 const app = express();
 const PORT = 3000;
+app.use(cors());
 
 const startScraping = async (product) => {
   const results = {};
@@ -30,6 +32,9 @@ const startScraping = async (product) => {
       const products = await page.evaluate(() => {
         const items = Array.from(document.querySelectorAll(".p-item"));
         return items.map((item) => {
+          const name = item.querySelector(".p-item-name")
+            ? item.querySelector(".p-item-name").innerText
+            : "Name not found";
           const price = item.querySelector(".p-item-price")
             ? item.querySelector(".p-item-price").innerText
             : "Out Of Stock";
@@ -38,8 +43,8 @@ const startScraping = async (product) => {
             : "Image not found";
           const link = item.querySelector(".p-item-img a")
             ? item.querySelector(".p-item-img a").href
-            : "Image not found";
-          return { price, img, link };
+            : "Link not found";
+          return { name, price, img, link };
         });
       });
 
@@ -80,6 +85,9 @@ const startScraping = async (product) => {
       const products = await page.evaluate(() => {
         const items = Array.from(document.querySelectorAll(".product-layout"));
         return items.map((item) => {
+          const name = item.querySelector(".name")
+            ? item.querySelector(".name").innerText
+            : "Name not found";
           const price = item.querySelector(".price-new")
             ? item.querySelector(".price-new").innerText
             : "Out Of Stock";
@@ -88,8 +96,8 @@ const startScraping = async (product) => {
             : "Image not found";
           const link = item.querySelector(".product-img")
             ? item.querySelector(".product-img").href
-            : "Image not found";
-          return { price, img, link };
+            : "Link not found";
+          return { name, price, img, link };
         });
       });
 
@@ -118,6 +126,9 @@ const startScraping = async (product) => {
           document.querySelectorAll(".category-single-product")
         );
         return items.map((item) => {
+          const name = item.querySelector(".p-item-name")
+            ? item.querySelector(".p-item-name").innerText
+            : "Name not found";
           const price = item.querySelector(".pr-text")
             ? item.querySelector(".pr-text").innerText
             : "Out Of Stock";
@@ -126,8 +137,8 @@ const startScraping = async (product) => {
             : "Image not found";
           const link = item.querySelector(".image-box a")
             ? item.querySelector(".image-box a").href
-            : "Image not found";
-          return { price, img, link };
+            : "Link not found";
+          return { name, price, img, link };
         });
       });
 
@@ -154,6 +165,9 @@ const startScraping = async (product) => {
       const products = await page.evaluate(() => {
         const items = Array.from(document.querySelectorAll(".single_product"));
         return items.map((item) => {
+          const name = item.querySelector(".p-item-name")
+            ? item.querySelector(".p-item-name").innerText
+            : "Name not found";
           const price = item.querySelector(".current_price")
             ? item.querySelector(".current_price").innerText
             : "Out Of Stock";
@@ -162,7 +176,7 @@ const startScraping = async (product) => {
             : "Image not found";
           const link = item.querySelector(".p-item-img a")
             ? item.querySelector(".p-item-img a").href
-            : "Image not found";
+            : "Link not found";
           return { price, img, link };
         });
       });
@@ -200,6 +214,9 @@ const startScraping = async (product) => {
       const products = await page.evaluate(() => {
         const items = Array.from(document.querySelectorAll(".product-layout"));
         return items.map((item) => {
+          const name = item.querySelector(".name")
+            ? item.querySelector(".name").innerText
+            : "Name not found";
           const price = item.querySelector(".price-new")
             ? item.querySelector(".price-new").innerText
             : "Out Of Stock";
@@ -208,8 +225,8 @@ const startScraping = async (product) => {
             : "Image not found";
           const link = item.querySelector(".product-img")
             ? item.querySelector(".product-img").href
-            : "Image not found";
-          return { price, img, link };
+            : "Link not found";
+          return { name, price, img, link };
         });
       });
 
@@ -246,6 +263,9 @@ const startScraping = async (product) => {
       const products = await page.evaluate(() => {
         const items = Array.from(document.querySelectorAll(".product-layout"));
         return items.map((item) => {
+          const name = item.querySelector(".name")
+            ? item.querySelector(".name").innerText
+            : "Name not found";
           const price = item.querySelector(".price-new")
             ? item.querySelector(".price-new").innerText
             : "Out Of Stock";
@@ -254,8 +274,8 @@ const startScraping = async (product) => {
             : "Image not found";
           const link = item.querySelector(".product-img")
             ? item.querySelector(".product-img").href
-            : "Image not found";
-          return { price, img, link };
+            : "Link not found";
+          return { name, price, img, link };
         });
       });
 
@@ -277,7 +297,7 @@ const startScraping = async (product) => {
   return results;
 };
 
-app.get("/", (req, res) => {
+app.get("/", (res) => {
   res.send("Welcome to the Price Scraper API!");
 });
 
