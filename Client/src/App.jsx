@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import countapi from "countapi-js";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ScrollButton from "./components/ScrollButton";
 
 function App() {
   const [visitors, setVisitors] = useState(null);
@@ -43,8 +44,15 @@ function App() {
         <Footer />
       </footer>
       <div>
-        <h1>Total Visitors: {visitors !== null ? visitors : "Loading..."}</h1>
+        <h1 className="text-prime">
+          Total
+          <span className="gradient-text px-1 text-xl">
+            {visitors !== null ? visitors : "Loading..."}
+          </span>{" "}
+          Visitors
+        </h1>
       </div>
+      <ScrollButton />
     </div>
   );
 }

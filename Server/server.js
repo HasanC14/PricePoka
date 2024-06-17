@@ -6,11 +6,11 @@ const app = express();
 const PORT = 3000;
 app.use(cors());
 
-const startScraping = async (product) => {
+const startScraping = async (product, headless) => {
   const results = {};
 
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: headless,
     defaultViewport: null,
     args: ["--start-maximized", "--no-sandbox", "--disable-setuid-sandbox"],
   });
@@ -119,7 +119,8 @@ const startScraping = async (product) => {
       await page.waitForSelector(".search-btn", { visible: true });
       await page.click(".search-btn");
 
-      await page.waitForSelector("#search-box-html", { visible: true });
+      // await page.waitForSelector("#search-box-html", { visible: true });
+      await page.waitForSelector(".recent-view-section", { visible: true });
 
       const products = await page.evaluate(() => {
         const items = Array.from(
@@ -302,15 +303,16 @@ app.get("/", (res) => {
 });
 
 app.get("/scrape", async (req, res) => {
-  const { product } = req.query;
+  const { product, headless } = req.query;
+  console.log(headless);
   if (!product) {
     return res
       .status(400)
       .send({ error: "Product query parameter is required" });
   }
-
+  const isHeadless = headless === "true";
   try {
-    const results = await startScraping(product);
+    const results = await startScraping(product, isHeadless);
     res.json(results);
   } catch (error) {
     res.status(500).send({ error: "Error during scraping" });
