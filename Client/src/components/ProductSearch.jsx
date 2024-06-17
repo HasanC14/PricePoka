@@ -53,36 +53,56 @@ const ProductSearch = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex text-red-500 items-center">
-        <FaCircleInfo className="mr-2" /> Please provide a accurate product name
-        for better results.
-      </div>
-      <div className="flex items-center">
-        <div className="bg-white p-4 rounded-lg">
-          <div className="relative bg-inherit">
+    <>
+      <div className="flex flex-col">
+        <form className="w-full ">
+          <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+            Search
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                />
+              </svg>
+            </div>
             <input
-              type="text"
-              id="search"
-              name="search"
+              type="search"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className="peer bg-transparent h-10 w-72 rounded-lg text-gray-500 placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
-              placeholder="Type inside me"
+              id="default-search"
+              className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="❌monitor ✅Msi Pro MP251"
+              required
             />
-
-            <label className="absolute cursor-text left-0 -top-3 text-sm text-gray-500 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all">
-              Search
-            </label>
+            <button
+              type="submit"
+              className="text-white absolute end-2.5 bottom-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 gradient-btn"
+              onClick={handleSearch}
+              disabled={isLoading || !inputValue.trim()}
+            >
+              {isLoading ? "Searching..." : "Search"}
+            </button>
           </div>
+        </form>
+        <div className="flex text-red-500 items-center mt-1">
+          <FaCircleInfo
+            className="mr-2"
+            // title="Please provide a accurate product name for better results."
+          />
+          Try to provide a accurate product name for better results.
         </div>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={handleSearch}
-          disabled={isLoading || !inputValue.trim()}
-        >
-          {isLoading ? "Searching..." : "Search"}
-        </button>
       </div>
 
       {isLoading && (
@@ -103,61 +123,76 @@ const ProductSearch = () => {
       {products && (
         <div className="mt-8">
           {Object.keys(products).map((shop) => (
-            <div key={shop} className="mb-8">
-              {shop === "Binary" && (
-                <img src={Binary} alt={shop} className="w-20" />
-              )}
-              {shop === "StarTech" && (
-                <img src={StarTech} alt={shop} className="w-20" />
-              )}
-              {shop === "Ryans" && (
-                <img src={Ryans} alt={shop} className="w-20" />
-              )}
-              {shop === "PC House" && (
-                <img src={PCHouse} alt={shop} className="w-20" />
-              )}
-              {shop === "TechLand" && (
-                <img src={TechLand} alt={shop} className="w-20 bg-black p-3" />
-              )}
-              {shop === "Ultra Technology" && (
-                <img src={Ultra} alt={shop} className="w-20" />
-              )}
-              <h2 className="text-xl mb-4">{shop}</h2>
+            <div key={shop} className="my-8">
+              <div className="mb-4">
+                {shop === "Binary" && (
+                  <img src={Binary} alt={shop} className="w-36" />
+                )}
+                {shop === "StarTech" && (
+                  <img src={StarTech} alt={shop} className="w-32" />
+                )}
+                {shop === "Ryans" && (
+                  <img src={Ryans} alt={shop} className="w-32" />
+                )}
+                {shop === "PC House" && (
+                  <img src={PCHouse} alt={shop} className="w-36" />
+                )}
+                {shop === "TechLand" && (
+                  <img
+                    src={TechLand}
+                    alt={shop}
+                    className="w-32 bg-black p-3"
+                  />
+                )}
+                {shop === "Ultra Technology" && (
+                  <img src={Ultra} alt={shop} className="w-32" />
+                )}
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {products[shop].length <= 0 ? (
+                  <div className="text-prime">No Product Found</div>
+                ) : (
+                  ""
+                )}
+
                 {products[shop].map((product, index) => (
-                  <div
+                  <a
+                    href={product.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     key={index}
-                    className="bg-white rounded-lg overflow-hidden shadow-md"
+                    className="bg_glass rounded-lg overflow-hidden shadow-md text-prime hover:scale-105 transition-all ease-in-out duration-500 p-2 space-y-2"
                   >
-                    <h6 className="text-xl mb-4">{product?.name}</h6>
                     <img
                       src={product?.img}
                       alt={product?.price}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-48 object-cover rounded-lg"
                     />
-                    <div className="p-4">
-                      <p className="text-lg font-semibold mb-2">
-                        {extractNumbersFromString(product?.price) == 0
-                          ? "Out Of Stock"
-                          : extractNumbersFromString(product?.price)}
-                      </p>
-                      <a
+                    <h6 className="text-sm truncate">{product?.name}</h6>
+
+                    <p className="text-xl font-semibold pb-3 gradient-text">
+                      {extractNumbersFromString(product?.price) == 0
+                        ? "Out Of Stock"
+                        : extractNumbersFromString(product?.price)}
+                      ৳
+                    </p>
+                    {/* <a
                         href={product.link}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline hover:text-blue-700"
                       >
                         View Product
-                      </a>
-                    </div>
-                  </div>
+                      </a> */}
+                  </a>
                 ))}
               </div>
             </div>
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

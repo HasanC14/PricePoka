@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Quicksand&family=Space+Grotesk:wght@500&display=swap");
+* {
+  font-family: "Space Grotesk", sans-serif;
+}
+body {
+  background: linear-gradient(to bottom, #022337, #092838);
+  height: max-content;
+  min-height: 100vh;
+}
+.bg-prime {
+  background: linear-gradient(to bottom, #022337, #092838);
+}
+.text-prime {
+  color: white;
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #087dc4, #1a86bc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 100;
+}
+
+.gradient-btn {
+  background: linear-gradient(to bottom, #087dc4, #459ac5);
+  color: white;
+}
+.gradient-btn:hover {
+  background: linear-gradient(to top, #087dc4, #459ac5);
+  color: white;
+}
+
+.bg_glass {
+  background: rgba(35, 137, 188, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-radius: 10px;
+}
+.loader-wrapper {
+  animation: scaleUpDown 1s ease-in-out infinite;
+}
+@keyframes scaleUpDown {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
