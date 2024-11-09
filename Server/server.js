@@ -6,11 +6,11 @@ const app = express();
 const PORT = 3000;
 app.use(cors());
 
-const startScraping = async (product, headless) => {
+const startScraping = async (product) => {
   const results = {};
 
   const browser = await puppeteer.launch({
-    headless: headless,
+    headless: false,
     defaultViewport: null,
     args: ["--start-maximized", "--no-sandbox", "--disable-setuid-sandbox"],
   });
@@ -111,10 +111,10 @@ const startScraping = async (product, headless) => {
     await page.goto("https://www.ryans.com/");
 
     try {
-      await page.waitForSelector(".search-input", {
+      await page.waitForSelector("#user-search-box", {
         visible: true,
       });
-      await page.type(".search-input", product);
+      await page.type("#user-search-box", product);
 
       await page.waitForSelector(".search-btn", { visible: true });
       await page.click(".search-btn");
@@ -127,8 +127,8 @@ const startScraping = async (product, headless) => {
           document.querySelectorAll(".category-single-product")
         );
         return items.map((item) => {
-          const name = item.querySelector(".p-item-name")
-            ? item.querySelector(".p-item-name").innerText
+          const name = item.querySelector(".card-text")
+            ? item.querySelector(".card-text").innerText
             : "Name not found";
           const price = item.querySelector(".pr-text")
             ? item.querySelector(".pr-text").innerText
@@ -221,8 +221,8 @@ const startScraping = async (product, headless) => {
           const price = item.querySelector(".price-new")
             ? item.querySelector(".price-new").innerText
             : "Out Of Stock";
-          const img = item.querySelector(".image img")
-            ? item.querySelector(".image img").src
+          const img = item.querySelector(".product-img img")
+            ? item.querySelector(".product-img img").src
             : "Image not found";
           const link = item.querySelector(".product-img")
             ? item.querySelector(".product-img").href
@@ -234,6 +234,54 @@ const startScraping = async (product, headless) => {
       results["Ultra Technology"] = products;
     } catch (error) {
       console.error("Error scraping Ultra Technology", error);
+    }
+  };
+  const scrapePotakaIT = async (page) => {
+    await page.goto("https://potakait.com/");
+
+    try {
+      const popupButton = await page.$(".popup-container button");
+      if (popupButton) {
+        await popupButton.click();
+        console.log("Popup closed.");
+      } else {
+        console.log("No popup found.");
+      }
+
+      await page.waitForSelector(".header-search input[name=search]", {
+        visible: true,
+      });
+      await page.type(".header-search input[name=search]", product);
+
+      await page.waitForSelector(".header-search button", { visible: true });
+      await page.click(".header-search button");
+
+      await page.waitForSelector(".main-products-wrapper", {
+        visible: true,
+      });
+
+      const products = await page.evaluate(() => {
+        const items = Array.from(document.querySelectorAll(".product-layout"));
+        return items.map((item) => {
+          const name = item.querySelector(".name")
+            ? item.querySelector(".name").innerText
+            : "Name not found";
+          const price = item.querySelector(".price-new")
+            ? item.querySelector(".price-new").innerText
+            : "Out Of Stock";
+          const img = item.querySelector(".image img")
+            ? item.querySelector(".image img").src
+            : "Image not found";
+          const link = item.querySelector(".product-img")
+            ? item.querySelector(".product-img").href
+            : "Link not found";
+          return { name, price, img, link };
+        });
+      });
+
+      results["PotakaIT"] = products;
+    } catch (error) {
+      console.error("Error scraping PotakaIT", error);
     }
   };
 
@@ -291,6 +339,7 @@ const startScraping = async (product, headless) => {
   await scrapeTechLand(page);
   await scrapeRyans(page);
   await scrapePcHouse(page);
+  await scrapePotakaIT(page);
   await scrapeUltraTech(page);
   await scrapeBinary(page);
 
@@ -303,16 +352,14 @@ app.get("/", (res) => {
 });
 
 app.get("/scrape", async (req, res) => {
-  const { product, headless } = req.query;
-  console.log(headless);
+  const { product } = req.query;
   if (!product) {
     return res
       .status(400)
       .send({ error: "Product query parameter is required" });
   }
-  const isHeadless = headless === "true";
   try {
-    const results = await startScraping(product, isHeadless);
+    const results = await startScraping(product);
     res.json(results);
   } catch (error) {
     res.status(500).send({ error: "Error during scraping" });
