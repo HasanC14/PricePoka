@@ -32,10 +32,13 @@ const ProductSearch = () => {
     setProducts(null);
     setLoadingGif(gifUrls[Math.floor(Math.random() * gifUrls.length)]);
     try {
+      console.log(inputValue);
+
       const response = await fetch(
-        `http://localhost:3000/scrape?product=${inputValue}&headless=${headless}`
+        `http://localhost:3000/scrape/${inputValue}`
       );
       const data = await response.json();
+      console.log(data);
       setProducts(data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -76,7 +79,7 @@ const ProductSearch = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 id="default-search"
                 className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="❌monitor ✅Msi Pro MP251"
+                placeholder="Khoj the Search"
                 required
               />
               <button
@@ -97,14 +100,6 @@ const ProductSearch = () => {
               </button>
             </div>
           </form>
-          {/* Headless False */}
-          <button
-            className="text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 gradient-btn"
-            onClick={() => handleSearch(false)}
-            disabled={isLoading || !inputValue.trim()}
-          >
-            Run in Your Browser
-          </button>
         </div>
         {isLoading}
         <div className="flex text-red-500 items-center mt-1">
@@ -129,9 +124,7 @@ const ProductSearch = () => {
             title="Loading"
           ></iframe>
           <div className="text-xs text-red-600 max-w-lg mx-auto text-center mt-2">
-            Scraping data from multiple websites might take some time. If
-            results do not appear, try
-            <span className="font-bold"> Run in Your Browser.</span>
+            Scraping data from multiple websites might take some time.
           </div>
         </div>
       )}
@@ -150,7 +143,7 @@ const ProductSearch = () => {
                 {shop === "Ryans" && (
                   <img src={Ryans} alt={shop} className="w-32" />
                 )}
-                {shop === "PC House" && (
+                {shop === "PcHouse" && (
                   <img src={PCHouse} alt={shop} className="w-36" />
                 )}
                 {shop === "TechLand" && (
@@ -160,12 +153,12 @@ const ProductSearch = () => {
                     className="w-32 bg-black p-3"
                   />
                 )}
-                {shop === "Ultra Technology" && (
+                {shop === "UltraTech" && (
                   <img src={Ultra} alt={shop} className="w-32" />
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {products[shop].length <= 0 ? (
                   <div className="text-prime">No Product Found</div>
                 ) : (

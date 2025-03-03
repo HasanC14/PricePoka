@@ -11,6 +11,9 @@ export default function Card({ product }) {
       return "Out Of Stock";
     }
   };
+
+  const price = extractNumbersFromString(product?.price);
+
   return (
     <a
       href={product.link}
@@ -26,19 +29,19 @@ export default function Card({ product }) {
       <h6 className="text-sm truncate">{product?.name}</h6>
 
       <p className="text-xl font-semibold pb-3 gradient-text">
-        {extractNumbersFromString(product?.price) == 0
-          ? "Out Of Stock"
-          : extractNumbersFromString(product?.price)}
-        ৳
+        {price === "Out Of Stock" || price === 0 ? "Out Of Stock" : `${price}৳`}
       </p>
-      {/* <a
-                        href={product.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 underline hover:text-blue-700"
-                      >
-                        View Product
-                      </a> */}
     </a>
   );
+}
+
+{
+  /* <a
+                  href={product.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline hover:text-blue-700"
+                >
+                  View Product
+                </a> */
 }
