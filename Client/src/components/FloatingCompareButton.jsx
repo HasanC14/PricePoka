@@ -10,9 +10,9 @@ export default function FloatingCompareButton() {
   return (
     <Link
       to="/compare"
-      className="fixed bottom-4 left-4 bg-black text-white px-4 py-2 rounded-full shadow-lg z-50 hover:bg-gray-800 transition"
+      className="fixed bottom-4 right-4  text-white lg:text-xl md:text-md text-sm z-10 transition-all ease-in-out duration-700 cursor-pointer gradient-btn text p-4 rounded-lg"
     >
-      🧾 Compare ({compareList.length})
+      🧾 Compare List ({compareList.length})
     </Link>
   );
 }

@@ -40,7 +40,7 @@ function HomePage() {
       <footer>
         <Footer />
       </footer>
-      <ScrollButton />
+      {/* <ScrollButton /> */}
     </div>
   );
 }
