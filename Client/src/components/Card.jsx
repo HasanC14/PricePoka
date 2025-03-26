@@ -19,29 +19,22 @@ export default function Card({ product }) {
       href={product.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="bg_glass rounded-lg overflow-hidden shadow-md text-prime hover:scale-105 transition-all ease-in-out duration-500 p-2 space-y-2"
+      className="bg_glass rounded-lg overflow-hidden shadow-md text-prime hover:scale-[103%] transition-all ease-in-out duration-500 p-4 space-y-2"
     >
       <img
         src={product?.img}
         alt={product?.price}
-        className="w-full h-48 object-cover rounded-lg"
+        className="w-full h-40 object-cover rounded-lg"
       />
       <h6 className="text-sm truncate">{product?.name}</h6>
 
-      <p className="text-xl font-semibold pb-3 gradient-text">
+      <p className="text-l font-semibold gradient-text text-left">
         {price === "Out Of Stock" || price === 0 ? "Out Of Stock" : `${price}৳`}
       </p>
+
+      <button className="gradient-btn rounded-md py-2 w-full">
+        Add to compare
+      </button>
     </a>
   );
-}
-
-{
-  /* <a
-                  href={product.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 underline hover:text-blue-700"
-                >
-                  View Product
-                </a> */
 }

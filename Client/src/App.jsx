@@ -29,7 +29,7 @@ function App() {
   return (
     <div
       id="visits"
-      className="flex flex-col items-center justify-center min-h-screen max-w-5xl mx-auto py-4"
+      className="flex flex-col items-center justify-center min-h-screen max-w-5xl mx-auto w-[90%] py-4"
     >
       {/* <header className="">
         <h1 className="text-3xl gradient-text font-semibold">Price Checker</h1>

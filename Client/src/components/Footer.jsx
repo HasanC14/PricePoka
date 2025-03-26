@@ -1,4 +1,5 @@
 import { useState } from "react";
+import profile from "../assets/pp.png";
 import {
   FaCircleXmark,
   FaEllipsis,
@@ -37,7 +38,7 @@ export default function Footer() {
             className="md:text-2xl text-lg  hover:underline gradient-text"
             target="_blank"
           >
-            Price Checker
+            Price Poka
           </a>
         </div>
         <div>
@@ -60,7 +61,7 @@ export default function Footer() {
           variants={textAreaVariants}
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
         >
-          <div className=" bg-prime max-w-screen-lg mx-auto text-second rounded-xl ">
+          <div className=" bg-prime max-w-screen-lg mx-auto text-prime rounded-xl ">
             <div className="w-full h-12 bg-[#6a85c8] rounded-t-xl flex justify-between items-center">
               <div>
                 <FaEllipsis className="text-5xl ms-4" />
@@ -74,11 +75,7 @@ export default function Footer() {
             </div>
             <div className="grid lg:grid-cols-3 grid-cols-1 md:px-4 md:py-16 p-3 bg-base-200">
               <div className="m-auto col-span-1">
-                <img
-                  src="../assets/Profie.png"
-                  alt=""
-                  className="size-72 rounded-full "
-                />
+                <img src={profile} alt="" className="size-72 rounded-full " />
               </div>
               <div className="col-span-2 lg:mt-0 mt-5">
                 <p className="text-xl  md:px-10 p-3">
@@ -109,6 +106,7 @@ export default function Footer() {
                     <a
                       href="mailto:dev.hasanchowdhury@gmail.com?subject=Hello%20There&body=I%20wanted%20to%20get%20in%20touch%20with%20you."
                       target="_blank"
+                      className="hover:text-white transition-all ease-in-out duration-700"
                     >
                       <FaEnvelopeOpen />
                     </a>

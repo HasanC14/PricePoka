@@ -1,4 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import SkeletonCard from "./SkeletonCard";
 
 import Binary from "../assets/binary.png";
 import StarTech from "../assets/startech.png";
@@ -15,22 +20,10 @@ const ProductSearch = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState(null);
-  const [loadingGif, setLoadingGif] = useState("");
 
-  const gifUrls = [
-    "https://giphy.com/embed/rIpm4UI7pv7WFiSm4s",
-    "https://giphy.com/embed/ZXf6dCfo4h9br1PMEQ",
-    "https://giphy.com/embed/RIwWQuRrVJLC4AB5Ik",
-    "https://giphy.com/embed/ghbSg8kaE3U15aD2cp",
-    "https://giphy.com/embed/gIzLZvcPFQyeQd4oRY",
-    "https://giphy.com/embed/9itja4ux9fpFTSu7le ",
-    "https://giphy.com/embed/l2Rno9dUdSVxorDj2",
-  ];
-
-  const handleSearch = async (headless) => {
+  const handleSearch = async () => {
     setIsLoading(true);
     setProducts(null);
-    setLoadingGif(gifUrls[Math.floor(Math.random() * gifUrls.length)]);
     try {
       console.log(inputValue);
 
@@ -102,28 +95,20 @@ const ProductSearch = () => {
           </form>
         </div>
         {isLoading}
-        <div className="flex text-red-500 items-center mt-1">
-          <FaCircleInfo
-            className="mr-2"
-            // title="Please provide a accurate product name for better results."
-          />
-          Try to provide a accurate product name for better results.
+        <div className="flex text-red-500 items-center mt-1 text-xs">
+          <FaCircleInfo className="mr-2" />
+          Try to provide an accurate product name for better search results.
         </div>
       </div>
 
       {isLoading && (
-        <div className="flex flex-col justify-center items-center mt-4">
-          <iframe
-            src={loadingGif}
-            width="480"
-            height="271"
-            style={{ border: "none" }}
-            frameBorder="0"
-            className="giphy-embed"
-            allowFullScreen
-            title="Loading"
-          ></iframe>
-          <div className="text-xs text-red-600 max-w-lg mx-auto text-center mt-2">
+        <div className="mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </div>
+          <div className="text-xs text-red-600 max-w-lg mx-auto text-center mt-4">
             Scraping data from multiple websites might take some time.
           </div>
         </div>
@@ -132,43 +117,62 @@ const ProductSearch = () => {
       {products && (
         <div className="mt-8">
           {Object.keys(products).map((shop) => (
-            <div key={shop} className="my-8">
-              <div className="mb-4">
+            <div
+              key={shop}
+              className="my-8 bg_glass rounded-lg lg:p-6 p-4 lg:pb-0 pb-0"
+            >
+              <div className="mb-4 bg-white p-2  rounded-lg">
                 {shop === "Binary" && (
-                  <img src={Binary} alt={shop} className="w-36" />
+                  <img src={Binary} alt={shop} className="lg:w-36 w-16" />
                 )}
                 {shop === "StarTech" && (
-                  <img src={StarTech} alt={shop} className="w-32" />
+                  <img src={StarTech} alt={shop} className="lg:w-24 w-16" />
                 )}
                 {shop === "Ryans" && (
-                  <img src={Ryans} alt={shop} className="w-32" />
+                  <img src={Ryans} alt={shop} className="lg:w-28 w-16" />
                 )}
                 {shop === "PcHouse" && (
-                  <img src={PCHouse} alt={shop} className="w-36" />
+                  <img src={PCHouse} alt={shop} className="lg:w-36 w-16" />
                 )}
                 {shop === "TechLand" && (
                   <img
                     src={TechLand}
                     alt={shop}
-                    className="w-32 bg-black p-3"
+                    className="lg:w-32 w-16 bg-black p-3"
                   />
                 )}
                 {shop === "UltraTech" && (
-                  <img src={Ultra} alt={shop} className="w-32" />
+                  <img src={Ultra} alt={shop} className="lg:w-28 w-16" />
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {products[shop].length <= 0 ? (
-                  <div className="text-prime">No Product Found</div>
+              <Swiper
+                // pagination={pagination}
+                pagination={{
+                  dynamicBullets: true,
+                  clickable: true,
+                }}
+                modules={[Pagination]}
+                spaceBetween={20}
+                breakpoints={{
+                  400: { slidesPerView: 2.5 },
+                  640: { slidesPerView: 3.5 },
+                  1024: { slidesPerView: 4.5 },
+                }}
+                className="mySwiper"
+              >
+                {products[shop].length === 0 ? (
+                  <SwiperSlide key={`${shop}-empty`}>
+                    <div className="text-prime">No Product Found</div>
+                  </SwiperSlide>
                 ) : (
-                  ""
+                  products[shop].map((product, index) => (
+                    <SwiperSlide key={index}>
+                      <Card product={product} />
+                    </SwiperSlide>
+                  ))
                 )}
-
-                {products[shop].map((product, index) => (
-                  <Card key={index} product={product} />
-                ))}
-              </div>
+              </Swiper>
             </div>
           ))}
         </div>
