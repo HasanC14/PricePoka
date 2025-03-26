@@ -35,7 +35,7 @@ const ProductSearch = () => {
       console.log(inputValue);
 
       const response = await fetch(
-        `http://localhost:3000/scrape/${inputValue}`
+        `https://price-poka-servre.vercel.app/scrape/${inputValue}`
       );
       const data = await response.json();
       console.log(data);
