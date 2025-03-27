@@ -27,6 +27,7 @@ export default function Card({ product }) {
         target="_blank"
         rel="noopener noreferrer"
         className="block hover:scale-[103%] transition-all ease-in-out duration-500"
+        title={product?.name}
       >
         <img
           src={product?.img}
