@@ -32,19 +32,10 @@ export default function Footer() {
     <div>
       {/* Footer */}
       <div className="text-xs text-prime mt-10 flex flex-col md:flex-row items-center">
-        <div className=" text-lg md:mr-2 mr-0">
-          <a
-            href="https://github.com/HasanC14/new-WriteRight-client"
-            className="md:text-2xl text-lg  hover:underline gradient-text"
-            target="_blank"
-          >
-            Price Poka
-          </a>
-        </div>
         <div>
           Made with ❤️ by
           <button
-            className="hover:underline ml-1 gradient-text"
+            className="hover:underline ml-1 gradient-text text-lg"
             onClick={toggleModal}
           >
             Hasan Chowdhury
@@ -62,7 +53,7 @@ export default function Footer() {
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
         >
           <div className=" bg-prime max-w-screen-lg mx-auto text-prime rounded-xl ">
-            <div className="w-full h-12 bg-[#6a85c8] rounded-t-xl flex justify-between items-center">
+            <div className="w-full h-12 bg-[#092838] rounded-t-xl flex justify-between items-center">
               <div>
                 <FaEllipsis className="text-5xl ms-4" />
               </div>
@@ -80,7 +71,7 @@ export default function Footer() {
               <div className="col-span-2 lg:mt-0 mt-5">
                 <p className="text-xl  md:px-10 p-3">
                   <span className="md:text-2xl text-lg ">
-                    Hi there! I&#39;m{" "}
+                    Hi there! I'm{" "}
                     <span className="md:text-4xl text-2xl font-bold gradient-text">
                       Hasan
                     </span>
@@ -95,15 +86,15 @@ export default function Footer() {
                     href="https://github.com/HasanC14/new-WriteRight-client"
                     className="md:text-2xl text-lg font-bold hover:underline gradient-text"
                   >
-                    Price Poka
+                    PricePoka
                   </a>{" "}
                   <span className="">
-                    because I was frustrated searching for the best prices
-                    across multiple websites. As a programmer, I don’t do
-                    repetitive tasks without a function — so I built this to
-                    save time and make life easier. Now, you can quickly compare
-                    prices from different stores, all in one place. No more
-                    endless tabs and wasted clicks!
+                    because I was frustrated searching for the prices across
+                    multiple websites. As a programmer, I don't do repetitive
+                    tasks without a function — so I built this to save time and
+                    make life easier. Now, you can quickly compare prices from
+                    different shops, all in one place. No more endless tabs and
+                    wasted clicks!
                   </span>
                   <div className="flex space-x-4 md:text-3xl text-2xl mt-5">
                     <a

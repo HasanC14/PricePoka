@@ -1,8 +1,7 @@
 import ProductSearch from "./ProductSearch";
 import Footer from "./Footer";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
-import ScrollButton from "./ScrollButton";
 
 function HomePage() {
   const namespace = "pricechecker";
@@ -29,7 +28,7 @@ function HomePage() {
       className="flex flex-col items-center justify-center min-h-screen max-w-5xl mx-auto w-[90%] py-4"
     >
       <header className="text-center mb-10">
-        <h1 className="text-3xl gradient-text font-semibold">Price Poka</h1>
+        <h1 className="text-3xl gradient-text font-semibold">PricePoka</h1>
         <div className="text-xs text-prime">
           Compare PC Part Prices Instantly
         </div>
@@ -40,7 +39,6 @@ function HomePage() {
       <footer>
         <Footer />
       </footer>
-      {/* <ScrollButton /> */}
     </div>
   );
 }
