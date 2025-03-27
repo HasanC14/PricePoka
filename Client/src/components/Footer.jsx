@@ -81,32 +81,35 @@ export default function Footer() {
                 <p className="text-xl  md:px-10 p-3">
                   <span className="md:text-2xl text-lg ">
                     Hi there! I&#39;m{" "}
-                    <span className="md:text-4xl text-2xl font-bold">
+                    <span className="md:text-4xl text-2xl font-bold gradient-text">
                       Hasan
                     </span>
                     ,{" "}
                   </span>{" "}
                   <br />a{" "}
-                  <span className="font-bold">Full Stack Web Developer</span>{" "}
+                  <span className="font-bold gradient-text">
+                    Full Stack Web Developer
+                  </span>{" "}
                   who loves to code. I created{" "}
                   <a
                     href="https://github.com/HasanC14/new-WriteRight-client"
-                    className="md:text-2xl text-lg font-bold hover:underline"
+                    className="md:text-2xl text-lg font-bold hover:underline gradient-text"
                   >
-                    WriteRight
+                    Price Poka
                   </a>{" "}
-                  , By leveraging the power of{" "}
-                  <span className="font-bold">Google</span>&#39;s latest
-                  language processing technology, to assist people in refining
-                  their writing skills. Good writing is an essential part of
-                  communication, and my goal is for WriteRight to make that
-                  process simpler. If you have any queries or comments, I would
-                  be delighted to hear from you!
+                  <span className="">
+                    because I was frustrated searching for the best prices
+                    across multiple websites. As a programmer, I don’t do
+                    repetitive tasks without a function — so I built this to
+                    save time and make life easier. Now, you can quickly compare
+                    prices from different stores, all in one place. No more
+                    endless tabs and wasted clicks!
+                  </span>
                   <div className="flex space-x-4 md:text-3xl text-2xl mt-5">
                     <a
                       href="mailto:dev.hasanchowdhury@gmail.com?subject=Hello%20There&body=I%20wanted%20to%20get%20in%20touch%20with%20you."
                       target="_blank"
-                      className="hover:text-white transition-all ease-in-out duration-700"
+                      className="hover:text-gray-400 transition-all ease-in-out duration-700"
                     >
                       <FaEnvelopeOpen />
                     </a>
@@ -114,7 +117,7 @@ export default function Footer() {
                       href="https://www.facebook.com/dev.hasanchowdhury"
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-white transition-all ease-in-out duration-700"
+                      className="hover:text-gray-400 transition-all ease-in-out duration-700"
                     >
                       <FaFacebook></FaFacebook>
                     </a>
@@ -122,7 +125,7 @@ export default function Footer() {
                       href="https://github.com/HasanC14"
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-white transition-all ease-in-out duration-700"
+                      className="hover:text-gray-400 transition-all ease-in-out duration-700"
                     >
                       <FaGithub></FaGithub>
                     </a>
@@ -130,7 +133,7 @@ export default function Footer() {
                       href="https://www.linkedin.com/in/dev1hasanchowdhury/"
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-white transition-all ease-in-out duration-700"
+                      className="hover:text-gray-400 transition-all ease-in-out duration-700"
                     >
                       <FaLinkedinIn></FaLinkedinIn>
                     </a>
