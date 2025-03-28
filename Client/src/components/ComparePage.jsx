@@ -25,22 +25,23 @@ export default function ComparePage() {
         {referenceProduct.name}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
         {/* Left - Product Info */}
         <div className="bg_glass shadow rounded p-4 flex flex-col items-center h-fit">
           <img
             src={referenceProduct.img}
             alt={referenceProduct.name}
-            className="w-full h-64 object-contain rounded"
+            className="w-full h-58 object-cover rounded"
           />
         </div>
 
         {/* Right - Merchant Table */}
         <div className="bg_glass shadow rounded overflow-hidden p-4 text-gray-300 overflow-x-auto">
-          <table className="w-full mnd:text-lg text-sm">
+          <table className="w-full mnd:text-lg text-sm table-auto">
             <thead className=" text-left">
               <tr className="">
                 <th className="p-3">Shop</th>
+                <th className="p-3 min-w-[100px]">Product Name</th>
                 <th className="p-3">Availability</th>
                 <th className="p-3">Price</th>
                 <th className="p-3"></th>
@@ -54,7 +55,7 @@ export default function ComparePage() {
                     <td className="p-2 font-medium ">
                       {}
                       <div className="p-2  rounded-lg">
-                        {getMerchantName(product.link) === "binary" && (
+                        {getMerchantName(product.link) === "binarylogic" && (
                           <img
                             src={Binary}
                             alt={getMerchantName(product.link)}
@@ -98,6 +99,7 @@ export default function ComparePage() {
                         )}
                       </div>
                     </td>
+                    <td className="p-2 text-[12px] ">{product.name}</td>
                     <td className="p-2 ">
                       {product.price.toLowerCase().includes("stock")
                         ? product.price
