@@ -29,9 +29,7 @@ function HomePage() {
     >
       <header className="text-center mb-10">
         <h1 className="text-3xl gradient-text font-semibold">PricePoka</h1>
-        <div className="text-xs text-prime">
-          Compare PC Part Prices Instantly
-        </div>
+        <p className="text-xs text-prime">Compare PC Part Prices Instantly</p>
       </header>
       <main className="w-full">
         <ProductSearch />
