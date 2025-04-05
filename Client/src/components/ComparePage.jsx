@@ -41,7 +41,7 @@ export default function ComparePage() {
             <thead className=" text-left">
               <tr className="">
                 <th className="p-3">Shop</th>
-                <th className="p-3 min-w-[100px]">Product Name</th>
+                <th className="p-3 min-w-[200px]">Product Name</th>
                 <th className="p-3">Availability</th>
                 <th className="p-3">Price</th>
                 <th className="p-3"></th>
