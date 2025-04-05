@@ -1,4 +1,4 @@
-const SitemapGenerator = require("sitemap-generator");
+import SitemapGenerator from "sitemap-generator";
 
 // Replace with your deployed URL
 const generator = SitemapGenerator("https://pricepoka.vercel.app", {
