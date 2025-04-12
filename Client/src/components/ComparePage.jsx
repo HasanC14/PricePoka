@@ -5,6 +5,7 @@ import Ryans from "../assets/rayans.svg";
 import PCHouse from "../assets/pchousew.webp";
 import TechLand from "../assets/techland.webp";
 import Ultra from "../assets/ultra.webp";
+import Skyland from "../assets/skyland.webp";
 export default function ComparePage() {
   const { compareList, removeFromCompare } = useCompare();
 
@@ -19,10 +20,11 @@ export default function ComparePage() {
   const referenceProduct = compareList[0];
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6 ">
       {/* Title */}
       <h1 className="text-2xl font-bold gradient-text mb-6">
         {referenceProduct.name}
+        {/* PricePoka */}
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
@@ -87,12 +89,19 @@ export default function ComparePage() {
                           <img
                             src={TechLand}
                             alt={getMerchantName(product.link)}
-                            className="w-20 bg-black p-2"
+                            className="w-20 bg-black p-1"
                           />
                         )}
                         {getMerchantName(product.link) === "ultratech" && (
                           <img
                             src={Ultra}
+                            alt={getMerchantName(product.link)}
+                            className="w-20"
+                          />
+                        )}
+                        {getMerchantName(product.link) === "skyland" && (
+                          <img
+                            src={Skyland}
                             alt={getMerchantName(product.link)}
                             className="w-20"
                           />

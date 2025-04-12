@@ -1,5 +1,6 @@
 // components/Card.js
 import { useCompare } from "../context/CompareContext";
+import placeholder from "../assets/place.jpg";
 
 export default function Card({ product }) {
   const { addToCompare, compareList } = useCompare();
@@ -30,11 +31,11 @@ export default function Card({ product }) {
         title={product?.name}
       >
         <img
-          src={product?.img}
-          alt={product?.price}
+          src={product?.img?.includes("skyland") ? placeholder : product?.img}
+          alt={product?.name}
           className="w-full h-40 object-cover rounded-lg"
         />
-        <h6 className="text-sm truncate">{product?.name}</h6>
+        <h6 className="text-xs text-left pt-2">{product?.name}</h6>
         <p className="text-l font-semibold gradient-text text-left">
           {price === "Out Of Stock" || price === 0
             ? "Out Of Stock"
@@ -43,7 +44,7 @@ export default function Card({ product }) {
       </a>
       <button
         onClick={() => addToCompare(product)}
-        className={`rounded-md py-2 w-full ${
+        className={`rounded-md py-2 w-full text-xs md:text-md lg:text-[16px] ${
           alreadyAdded ? "bg-gray-400 cursor-not-allowed" : "gradient-btn"
         }`}
         disabled={alreadyAdded}

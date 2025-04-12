@@ -6,11 +6,7 @@ import { Pagination } from "swiper/modules";
 import SkeletonCard from "./SkeletonCard";
 
 import Binary from "../assets/binary.png";
-import StarTech from "../assets/startech.png";
-import Ryans from "../assets/rayans.svg";
-import PCHouse from "../assets/pchousew.webp";
-import TechLand from "../assets/techland.webp";
-import Ultra from "../assets/ultra.webp";
+import SkyLand from "../assets/skyland.webp";
 
 import { FaCircleInfo, FaXmark } from "react-icons/fa6";
 import Loader from "./Loader";
@@ -19,20 +15,20 @@ import Card from "./Card";
 const ProductSearch = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [products, setProducts] = useState(null);
+  const [shops, setShops] = useState(null);
 
   const handleSearch = async () => {
     setIsLoading(true);
-    setProducts(null);
+    setShops(null);
     try {
-      console.log(inputValue);
+      // console.log(inputValue);
 
       const response = await fetch(
         `https://price-poka-servre.vercel.app/scrape/${inputValue}`
       );
       const data = await response.json();
-      console.log(data);
-      setProducts(data);
+      // console.log(data);
+      setShops(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -95,7 +91,7 @@ const ProductSearch = () => {
           </form>
         </div>
         {isLoading}
-        <div className="flex text-red-500 items-center mt-1 text-xs">
+        <div className="flex text-red-500 items-center mt-1 md:text-xs text-[9px]">
           <FaCircleInfo className="mr-2" />
           Try to provide an accurate product name for better search results.
         </div>
@@ -114,35 +110,38 @@ const ProductSearch = () => {
         </div>
       )}
 
-      {products && (
+      {shops && (
         <div className="mt-8">
-          {Object.keys(products).map((shop) => (
+          {shops.map((shop) => (
             <div
               key={shop}
               className="my-8 bg_glass rounded-lg lg:p-6 p-4 lg:pb-0 pb-0"
             >
-              <div className="mb-4 bg-white p-2  rounded-lg">
-                {shop === "Binary" && (
-                  <img src={Binary} alt={shop} className="lg:w-36 w-16" />
-                )}
-                {shop === "StarTech" && (
-                  <img src={StarTech} alt={shop} className="lg:w-24 w-16" />
-                )}
-                {shop === "Ryans" && (
-                  <img src={Ryans} alt={shop} className="lg:w-28 w-16" />
-                )}
-                {shop === "PcHouse" && (
-                  <img src={PCHouse} alt={shop} className="lg:w-36 w-16" />
-                )}
-                {shop === "TechLand" && (
+              <div className="md:mb-4 mb-0 bg-white p-2  rounded-lg">
+                {shop.name === "Binary" && (
                   <img
-                    src={TechLand}
-                    alt={shop}
-                    className="lg:w-32 w-16 bg-black p-3"
+                    src={Binary}
+                    alt={shop.name}
+                    className="lg:w-36 w-16 lg:h-8 h-6 object-contain object-left"
                   />
                 )}
-                {shop === "UltraTech" && (
-                  <img src={Ultra} alt={shop} className="lg:w-28 w-16" />
+                {shop.name === "SkyLand" && (
+                  <img
+                    src={SkyLand}
+                    alt={shop.name}
+                    className="lg:w-36 w-16 lg:h-8 h-6 object-contain object-left"
+                  />
+                )}
+                {shop.name !== "Binary" && shop.name !== "SkyLand" && (
+                  <img
+                    src={shop.logo}
+                    alt={shop.name}
+                    className={`${
+                      shop.name == "TechLand"
+                        ? "bg-black lg:w-36 w-16 lg:h-8 h-6 object-contain object-left"
+                        : "lg:w-36 w-16 lg:h-8 h-6 object-contain object-left"
+                    }`}
+                  />
                 )}
               </div>
 
@@ -155,18 +154,19 @@ const ProductSearch = () => {
                 modules={[Pagination]}
                 spaceBetween={20}
                 breakpoints={{
-                  400: { slidesPerView: 2.5 },
-                  640: { slidesPerView: 3.5 },
+                  200: { slidesPerView: 1.5 },
+                  550: { slidesPerView: 2.5 },
+                  760: { slidesPerView: 3.5 },
                   1024: { slidesPerView: 4.5 },
                 }}
                 className="mySwiper"
               >
-                {products[shop].length === 0 ? (
+                {shop.products.length === 0 ? (
                   <SwiperSlide key={`${shop}-empty`}>
                     <div className="text-prime">No Product Found</div>
                   </SwiperSlide>
                 ) : (
-                  products[shop].map((product, index) => (
+                  shop.products.map((product, index) => (
                     <SwiperSlide key={index}>
                       <Card product={product} />
                     </SwiperSlide>
