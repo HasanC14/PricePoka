@@ -24,7 +24,7 @@ const ProductSearch = () => {
       // console.log(inputValue);
 
       const response = await fetch(
-        `https://price-poka-servre.vercel.app/scrape/${inputValue}`
+        `http://localhost:3000/scrape/${inputValue}`
       );
       const data = await response.json();
       // console.log(data);
@@ -112,9 +112,9 @@ const ProductSearch = () => {
 
       {shops && (
         <div className="mt-8">
-          {shops.map((shop) => (
+          {shops.map((shop, index) => (
             <div
-              key={shop}
+              key={index}
               className="my-8 bg_glass rounded-lg lg:p-6 p-4 lg:pb-0 pb-0"
             >
               <div className="md:mb-4 mb-0 bg-white p-2  rounded-lg">
@@ -161,7 +161,7 @@ const ProductSearch = () => {
                 }}
                 className="mySwiper"
               >
-                {shop.products.length === 0 ? (
+                {shop.products?.length === 0 ? (
                   <SwiperSlide key={`${shop}-empty`}>
                     <div className="text-prime">No Product Found</div>
                   </SwiperSlide>

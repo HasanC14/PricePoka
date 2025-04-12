@@ -4,24 +4,24 @@ import { useEffect } from "react";
 import axios from "axios";
 
 function HomePage() {
-  const namespace = "pricechecker";
-  const key = "hasan14";
+  // const namespace = "pricechecker";
+  // const key = "hasan14";
 
-  useEffect(() => {
-    const fetchVisitors = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.countapi.xyz/hit/${namespace}/${key}`
-        );
-        console.log(response.data);
-        setVisitors(response.data.value);
-      } catch (error) {
-        console.error("Error fetching the data", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchVisitors = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `https://api.countapi.xyz/hit/${namespace}/${key}`
+  //       );
+  //       console.log(response.data);
+  //       setVisitors(response.data.value);
+  //     } catch (error) {
+  //       console.error("Error fetching the data", error);
+  //     }
+  //   };
 
-    fetchVisitors();
-  }, []);
+  //   fetchVisitors();
+  // }, []);
   return (
     <div
       id="visits"
