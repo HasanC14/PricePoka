@@ -24,7 +24,7 @@ const ProductSearch = () => {
       // console.log(inputValue);
 
       const response = await fetch(
-        `http://localhost:3000/scrape/${inputValue}`
+        `https://pricepoka-servre.onrender.com/scrape/${inputValue}`
       );
       const data = await response.json();
       // console.log(data);
@@ -166,7 +166,7 @@ const ProductSearch = () => {
                     <div className="text-prime">No Product Found</div>
                   </SwiperSlide>
                 ) : (
-                  shop.products.map((product, index) => (
+                  shop.products?.map((product, index) => (
                     <SwiperSlide key={index}>
                       <Card product={product} />
                     </SwiperSlide>
