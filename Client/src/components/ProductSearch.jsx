@@ -24,7 +24,7 @@ const ProductSearch = () => {
       // console.log(inputValue);
 
       const response = await fetch(
-        `https://pricepoka-servre.onrender.com/scrape/${inputValue}`
+        `https://price-poka-servre.vercel.app/scrape/${inputValue}`
       );
       const data = await response.json();
       // console.log(data);
