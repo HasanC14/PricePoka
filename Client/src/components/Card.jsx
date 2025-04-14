@@ -31,7 +31,8 @@ export default function Card({ product }) {
         title={product?.name}
       >
         <img
-          src={product?.img?.includes("skyland") ? placeholder : product?.img}
+          src={product?.img ? product?.img : placeholder}
+          // src={product?.img?.includes("skyland") ? placeholder : product?.img}
           alt={product?.name}
           className="w-full h-40 object-cover rounded-lg"
         />

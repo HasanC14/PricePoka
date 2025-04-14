@@ -8,7 +8,7 @@ import SkeletonCard from "./SkeletonCard";
 import Binary from "../assets/binary.png";
 import SkyLand from "../assets/skyland.webp";
 
-import { FaCircleInfo, FaXmark } from "react-icons/fa6";
+import { FaCircleInfo, FaXmark, FaTriangleExclamation } from "react-icons/fa6";
 import Loader from "./Loader";
 import Card from "./Card";
 
@@ -16,21 +16,35 @@ const ProductSearch = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [shops, setShops] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleSearch = async () => {
     setIsLoading(true);
     setShops(null);
-    try {
-      // console.log(inputValue);
+    setError(null);
 
+    try {
       const response = await fetch(
-        `https://price-poka-servre.vercel.app/scrape/${inputValue}`
+        `${import.meta.env.VITE_API_BASE_URL}/scrape/${inputValue}`
       );
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          setError(
+            "You're sending too many requests. Please wait and try again."
+          );
+        } else {
+          setError("Something went wrong while fetching data.");
+        }
+        setIsLoading(false);
+        return;
+      }
+
       const data = await response.json();
-      // console.log(data);
       setShops(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError("Unable to connect to server. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +82,7 @@ const ProductSearch = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 id="default-search"
                 className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Khoj the Search"
+                placeholder="Khoj the Search..."
                 required
               />
               <button
@@ -90,11 +104,16 @@ const ProductSearch = () => {
             </div>
           </form>
         </div>
-        {isLoading}
         <div className="flex text-red-500 items-center mt-1 md:text-xs text-[9px]">
           <FaCircleInfo className="mr-2" />
           Try to provide an accurate product name for better search results.
         </div>
+        {error && (
+          <div className="flex text-yellow-600 items-center mt-1 md:text-xs text-[9px]">
+            <FaTriangleExclamation className="mr-2" />
+            {error}
+          </div>
+        )}
       </div>
 
       {isLoading && (
