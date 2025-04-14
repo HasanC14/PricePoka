@@ -142,17 +142,17 @@ const ProductSearch = () => {
         <label className="text-sm font-medium text-gray-500">Price Range</label>
         <input
           type="number"
-          placeholder="Min Price"
+          placeholder="Min"
           value={minPrice}
           onChange={(e) => setMinPrice(e.target.value)}
-          className="px-2 py-1 text-sm border rounded w-28"
+          className="no-spinner px-2 py-1 text-sm border rounded w-28"
         />
         <input
           type="number"
-          placeholder="Max Price"
+          placeholder="Max"
           value={maxPrice}
           onChange={(e) => setMaxPrice(e.target.value)}
-          className="px-2 py-1 text-sm border rounded w-28"
+          className="no-spinner px-2 py-1 text-sm border rounded w-28"
         />
         <label className="text-sm font-medium text-gray-500">In Stock</label>
         <input
