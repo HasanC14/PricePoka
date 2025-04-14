@@ -18,8 +18,10 @@ const ProductSearch = () => {
   const [shops, setShops] = useState(null);
   const [error, setError] = useState(null);
   const [currentPages, setCurrentPages] = useState({});
-  const [perPage, setPerPage] = useState(8); // default to desktop
+  const [perPage, setPerPage] = useState(8);
   const [showInStockOnly, setShowInStockOnly] = useState(false);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   useEffect(() => {
     const handleResize = () => {
@@ -136,7 +138,22 @@ const ProductSearch = () => {
         )}
       </div>
 
-      <div className="flex items-center justify-end mt-4 space-x-2">
+      <div className="flex items-center justify-end mt-4 space-x-4 flex-wrap">
+        <label className="text-sm font-medium text-gray-500">Price Range</label>
+        <input
+          type="number"
+          placeholder="Min Price"
+          value={minPrice}
+          onChange={(e) => setMinPrice(e.target.value)}
+          className="px-2 py-1 text-sm border rounded w-28"
+        />
+        <input
+          type="number"
+          placeholder="Max Price"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+          className="px-2 py-1 text-sm border rounded w-28"
+        />
         <label className="text-sm font-medium text-gray-500">In Stock</label>
         <input
           type="checkbox"
@@ -177,12 +194,17 @@ const ProductSearch = () => {
               }
             };
 
-            const filteredProducts = showInStockOnly
-              ? (shop?.products || []).filter((product) => {
-                  const price = extractNumbersFromString(product?.price);
-                  return price > 0;
-                })
-              : shop.products || [];
+            const filteredProducts = (shop?.products || []).filter(
+              (product) => {
+                const price = extractNumbersFromString(product?.price);
+
+                const inStock = !showInStockOnly || price > 0;
+                const aboveMin = !minPrice || price >= parseFloat(minPrice);
+                const belowMax = !maxPrice || price <= parseFloat(maxPrice);
+
+                return inStock && aboveMin && belowMax;
+              }
+            );
 
             const page = currentPages[shopIndex] || 1;
             const totalPages = Math.ceil(filteredProducts?.length / perPage);
