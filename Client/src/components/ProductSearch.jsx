@@ -37,7 +37,23 @@ const ProductSearch = () => {
 
     handleResize(); // set on mount
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  useEffect(() => {
+    const savedInput = localStorage.getItem("lastSearchInput");
+    const savedResults = localStorage.getItem("lastSearchResults");
+    const savedTime = localStorage.getItem("lastSearchTime");
+
+    const isExpired =
+      savedTime && Date.now() - parseInt(savedTime) > 30 * 60 * 1000; // 30 mins
+
+    if (!isExpired && savedInput && savedResults) {
+      setInputValue(savedInput);
+      setShops(JSON.parse(savedResults));
+    } else {
+      localStorage.removeItem("lastSearchInput");
+      localStorage.removeItem("lastSearchResults");
+      localStorage.removeItem("lastSearchTime");
+    }
   }, []);
 
   const handleSearch = async () => {
@@ -64,12 +80,21 @@ const ProductSearch = () => {
 
       const data = await response.json();
       setShops(data);
+      localStorage.setItem("lastSearchInput", inputValue);
+      localStorage.setItem("lastSearchResults", JSON.stringify(data));
+      localStorage.setItem("lastSearchTime", Date.now().toString());
     } catch (err) {
       console.error("Fetch error:", err);
       setError("Unable to connect to server. Please try again later.");
     } finally {
       setIsLoading(false);
     }
+  };
+  const clearSearch = () => {
+    setInputValue("");
+    setShops(null);
+    localStorage.removeItem("lastSearchInput");
+    localStorage.removeItem("lastSearchResults");
   };
 
   return (
@@ -116,9 +141,9 @@ const ProductSearch = () => {
                 {isLoading ? <Loader /> : "Search"}
               </button>
               <button
-                type="submit"
-                className="text-gray-600 absolute end-24 bottom-5 text-sm "
-                onClick={() => setInputValue("")}
+                type="button"
+                className="text-gray-600 absolute end-24 bottom-5 text-sm"
+                onClick={clearSearch}
                 disabled={isLoading || !inputValue.trim()}
               >
                 <FaXmark />
@@ -138,34 +163,6 @@ const ProductSearch = () => {
         )}
       </div>
 
-      <div className="flex items-center justify-end mt-4 space-x-4 flex-wrap">
-        <label className="text-sm font-medium text-gray-500">Price Range</label>
-        <input
-          type="number"
-          placeholder="Min"
-          value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
-          className="no-spinner px-2 py-1 text-sm border rounded w-28"
-        />
-        <input
-          type="number"
-          placeholder="Max"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-          className="no-spinner px-2 py-1 text-sm border rounded w-28"
-        />
-        <label className="text-sm font-medium text-gray-500">In Stock</label>
-        <input
-          type="checkbox"
-          checked={showInStockOnly}
-          onChange={() => {
-            setShowInStockOnly(!showInStockOnly);
-            setCurrentPages({});
-          }}
-          className="w-4 h-4"
-        />
-      </div>
-
       {isLoading && (
         <div className="mt-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -181,16 +178,47 @@ const ProductSearch = () => {
 
       {shops && (
         <div className="mt-8">
+          <div className="flex items-center justify-end mt-4 space-x-4 md:space-y-0 space-y-4 flex-wrap">
+            <label className="text-sm font-medium text-gray-500">
+              Price Range
+            </label>
+            <input
+              type="number"
+              placeholder="Min"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+              className="no-spinner px-2 py-1 text-sm border rounded w-28"
+            />
+            <input
+              type="number"
+              placeholder="Max"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              className="no-spinner px-2 py-1 text-sm border rounded w-28"
+            />
+            <label className="text-sm font-medium text-gray-500">
+              In Stock
+            </label>
+            <input
+              type="checkbox"
+              checked={showInStockOnly}
+              onChange={() => {
+                setShowInStockOnly(!showInStockOnly);
+                setCurrentPages({});
+              }}
+              className="w-4 h-4"
+            />
+          </div>
           {shops.map((shop, shopIndex) => {
             const extractNumbersFromString = (str) => {
               const regex = /[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?/g;
-              const matches = str.match(regex);
+              const matches = String(str).match(regex); // Force str into a string
               if (matches && matches.length > 0) {
                 const lastMatch = matches[matches.length - 1];
                 const numericString = lastMatch.replace(/,/g, "");
                 return parseFloat(numericString);
               } else {
-                return "0";
+                return 0;
               }
             };
 
@@ -214,7 +242,10 @@ const ProductSearch = () => {
             );
 
             return (
-              <div key={shopIndex} className="my-8">
+              <div
+                key={shopIndex}
+                className={`${shopIndex !== 0 ? "my-8" : ""}`}
+              >
                 <div className="flex items-center space-x-3 mb-4">
                   <img
                     src={

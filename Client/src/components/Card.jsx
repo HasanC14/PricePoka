@@ -9,13 +9,13 @@ export default function Card({ product }) {
 
   const extractNumbersFromString = (str) => {
     const regex = /[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?/g;
-    const matches = str.match(regex);
+    const matches = String(str).match(regex); // Force str into a string
     if (matches && matches.length > 0) {
       const lastMatch = matches[matches.length - 1];
       const numericString = lastMatch.replace(/,/g, "");
       return parseFloat(numericString);
     } else {
-      return "Out Of Stock";
+      return 0;
     }
   };
 

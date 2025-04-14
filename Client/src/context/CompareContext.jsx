@@ -20,9 +20,19 @@ export const CompareProvider = ({ children }) => {
     setCompareList((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const removeAllFromCompare = () => {
+    setCompareList([]);
+  };
+
   return (
     <CompareContext.Provider
-      value={{ compareList, addToCompare, removeFromCompare, showPopup }}
+      value={{
+        compareList,
+        addToCompare,
+        removeFromCompare,
+        removeAllFromCompare,
+        showPopup,
+      }}
     >
       {children}
     </CompareContext.Provider>
