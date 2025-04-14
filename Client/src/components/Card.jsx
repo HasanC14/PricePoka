@@ -27,15 +27,26 @@ export default function Card({ product }) {
         href={product.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="block hover:scale-[103%] transition-all ease-in-out duration-500"
+        className="block "
         title={product?.name}
       >
-        <img
-          src={product?.img ? product?.img : placeholder}
-          // src={product?.img?.includes("skyland") ? placeholder : product?.img}
-          alt={product?.name}
-          className="w-full h-40 object-cover rounded-lg"
-        />
+        <div className="w-full h-40 bg-white rounded-lg hover:scale-[103%] transition-all ease-in-out duration-500 ">
+          <img
+            // src={product?.img ? product?.img : placeholder}
+            src={
+              product?.img && !product.img.includes("skyland")
+                ? product.img
+                : placeholder
+            }
+            alt={product?.name}
+            className={`${
+              product?.img.includes("skyland")
+                ? "object-cover rounded-lg"
+                : " object-contain"
+            }   h-full w-full `}
+          />
+        </div>
+
         <h6 className="text-xs text-left pt-2">{product?.name}</h6>
         <p className="text-l font-semibold gradient-text text-left">
           {price === "Out Of Stock" || price === 0

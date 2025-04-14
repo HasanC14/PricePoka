@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -17,6 +17,26 @@ const ProductSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [shops, setShops] = useState(null);
   const [error, setError] = useState(null);
+  const [currentPages, setCurrentPages] = useState({});
+  const [perPage, setPerPage] = useState(8); // default to desktop
+  const [showInStockOnly, setShowInStockOnly] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setPerPage(2); // mobile
+      } else if (width < 1024) {
+        setPerPage(4); // tablet
+      } else {
+        setPerPage(8); // desktop
+      }
+    };
+
+    handleResize(); // set on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleSearch = async () => {
     setIsLoading(true);
@@ -116,6 +136,19 @@ const ProductSearch = () => {
         )}
       </div>
 
+      <div className="flex items-center justify-end mt-4 space-x-2">
+        <label className="text-sm font-medium text-gray-500">In Stock</label>
+        <input
+          type="checkbox"
+          checked={showInStockOnly}
+          onChange={() => {
+            setShowInStockOnly(!showInStockOnly);
+            setCurrentPages({});
+          }}
+          className="w-4 h-4"
+        />
+      </div>
+
       {isLoading && (
         <div className="mt-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -131,69 +164,86 @@ const ProductSearch = () => {
 
       {shops && (
         <div className="mt-8">
-          {shops.map((shop, index) => (
-            <div
-              key={index}
-              className="my-8 bg_glass rounded-lg lg:p-6 p-4 lg:pb-0 pb-0"
-            >
-              <div className="md:mb-4 mb-0 bg-white p-2  rounded-lg">
-                {shop.name === "Binary" && (
+          {shops.map((shop, shopIndex) => {
+            const extractNumbersFromString = (str) => {
+              const regex = /[0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?/g;
+              const matches = str.match(regex);
+              if (matches && matches.length > 0) {
+                const lastMatch = matches[matches.length - 1];
+                const numericString = lastMatch.replace(/,/g, "");
+                return parseFloat(numericString);
+              } else {
+                return "0";
+              }
+            };
+
+            const filteredProducts = showInStockOnly
+              ? (shop?.products || []).filter((product) => {
+                  const price = extractNumbersFromString(product?.price);
+                  return price > 0;
+                })
+              : shop.products || [];
+
+            const page = currentPages[shopIndex] || 1;
+            const totalPages = Math.ceil(filteredProducts?.length / perPage);
+            const paginatedProducts = filteredProducts.slice(
+              (page - 1) * perPage,
+              page * perPage
+            );
+
+            return (
+              <div key={shopIndex} className="my-8">
+                <div className="flex items-center space-x-3 mb-4">
                   <img
-                    src={Binary}
+                    src={
+                      shop.name === "Binary"
+                        ? Binary
+                        : shop.name === "SkyLand"
+                        ? SkyLand
+                        : shop.logo
+                    }
                     alt={shop.name}
-                    className="lg:w-36 w-16 lg:h-8 h-6 object-contain object-left"
+                    className="w-16 h-16 object-contain"
                   />
+                </div>
+
+                {paginatedProducts?.length === 0 ? (
+                  <div className="text-prime text-sm text-center">
+                    No Product Found
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    {paginatedProducts?.map((product, i) => (
+                      <Card key={i} product={product} />
+                    ))}
+                  </div>
                 )}
-                {shop.name === "SkyLand" && (
-                  <img
-                    src={SkyLand}
-                    alt={shop.name}
-                    className="lg:w-36 w-16 lg:h-8 h-6 object-contain object-left"
-                  />
-                )}
-                {shop.name !== "Binary" && shop.name !== "SkyLand" && (
-                  <img
-                    src={shop.logo}
-                    alt={shop.name}
-                    className={`${
-                      shop.name == "TechLand"
-                        ? "bg-black lg:w-36 w-16 lg:h-8 h-6 object-contain object-left"
-                        : "lg:w-36 w-16 lg:h-8 h-6 object-contain object-left"
-                    }`}
-                  />
+
+                {totalPages > 1 && (
+                  <div className="flex justify-end items-center flex-wrap gap-2 mt-4">
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button
+                        key={i}
+                        onClick={() =>
+                          setCurrentPages((prev) => ({
+                            ...prev,
+                            [shopIndex]: i + 1,
+                          }))
+                        }
+                        className={`px-3 py-1 text-sm rounded ${
+                          page === i + 1
+                            ? "bg-blue-600 text-white"
+                            : "gradient-btn text-white hover:bg-gray-300"
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
-
-              <Swiper
-                // pagination={pagination}
-                pagination={{
-                  dynamicBullets: true,
-                  clickable: true,
-                }}
-                modules={[Pagination]}
-                spaceBetween={20}
-                breakpoints={{
-                  200: { slidesPerView: 1.5 },
-                  550: { slidesPerView: 2.5 },
-                  760: { slidesPerView: 3.5 },
-                  1024: { slidesPerView: 4.5 },
-                }}
-                className="mySwiper"
-              >
-                {shop.products?.length === 0 ? (
-                  <SwiperSlide key={`${shop}-empty`}>
-                    <div className="text-prime">No Product Found</div>
-                  </SwiperSlide>
-                ) : (
-                  shop.products?.map((product, index) => (
-                    <SwiperSlide key={index}>
-                      <Card product={product} />
-                    </SwiperSlide>
-                  ))
-                )}
-              </Swiper>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </>
