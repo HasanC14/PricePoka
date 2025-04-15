@@ -10,6 +10,7 @@ import Vibegaming from "../assets/vibegaming.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
+import ad from "../assets/AD.webp";
 export default function ComparePage() {
   const { compareList, removeFromCompare, removeAllFromCompare } = useCompare();
   // Extract domain for merchant display
@@ -65,6 +66,17 @@ export default function ComparePage() {
         {referenceProduct?.name}
         {/* PricePoka */}
       </h1>
+      <a
+        href="https://vibegaming.com.bd/"
+        target="_blank"
+        className="w-full h-full mt-4"
+      >
+        <img
+          src={ad}
+          alt="Advertisement"
+          className="rounded-md w-full h-full object-contain "
+        />
+      </a>
       <button
         onClick={() => removeAllFromCompare()}
         className="fixed flex items-center gap-2 bottom-4 right-48 lg:right-64  text-white lg:text-xl md:text-md text-sm z-10 transition-all ease-in-out duration-700 cursor-pointer gradient-btn text p-4 rounded-lg"
@@ -72,7 +84,7 @@ export default function ComparePage() {
         <MdDelete /> Remove All
       </button>
 
-      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 mt-4">
         {/* Left - Product Info */}
         <div className="bg_glass shadow rounded p-4 flex flex-col items-center h-fit">
           <img

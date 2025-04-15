@@ -7,6 +7,7 @@ import SkeletonCard from "./SkeletonCard";
 
 import Binary from "../assets/binary.png";
 import SkyLand from "../assets/skyland.webp";
+import ad from "../assets/AD.webp";
 
 import { FaCircleInfo, FaXmark, FaTriangleExclamation } from "react-icons/fa6";
 import Loader from "./Loader";
@@ -151,10 +152,21 @@ const ProductSearch = () => {
             </div>
           </form>
         </div>
-        <div className="flex text-red-500 items-center mt-1 md:text-xs text-[9px]">
+        <a
+          href="https://vibegaming.com.bd/"
+          target="_blank"
+          className="w-full h-full mt-4 rounded-lg"
+        >
+          <img
+            src={ad}
+            alt="Advertisement"
+            className="rounded-lg w-full h-full object-contain "
+          />
+        </a>
+        {/* <div className="flex text-red-500 items-center mt-1 md:text-xs text-[9px]">
           <FaCircleInfo className="mr-2" />
           Try to provide an accurate product name for better search results.
-        </div>
+        </div> */}
         {error && (
           <div className="flex text-yellow-600 items-center mt-1 md:text-xs text-[9px]">
             <FaTriangleExclamation className="mr-2" />
