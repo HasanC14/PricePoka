@@ -7,6 +7,7 @@ import TechLand from "../assets/techland.webp";
 import Ultra from "../assets/ultra.webp";
 import Skyland from "../assets/skyland.webp";
 import Vibegaming from "../assets/vibegaming.png";
+import potaka from "../assets/potaka.webp";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -166,6 +167,13 @@ export default function ComparePage() {
                         {getMerchantName(product?.link) === "vibegaming" && (
                           <img
                             src={Vibegaming}
+                            alt={getMerchantName(product?.link)}
+                            className="w-20"
+                          />
+                        )}
+                        {getMerchantName(product?.link) === "potakait" && (
+                          <img
+                            src={potaka}
                             alt={getMerchantName(product?.link)}
                             className="w-20"
                           />
