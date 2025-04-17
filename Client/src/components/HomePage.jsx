@@ -3,7 +3,6 @@ import Footer from "./Footer";
 import { useEffect } from "react";
 import axios from "axios";
 import logo from "../assets/logo.png";
-import Wordmark from "../assets/logotext.png";
 
 
 function HomePage() {
@@ -32,10 +31,11 @@ function HomePage() {
 >
   <header className="text-center mb-10">
     <img
-      src={Wordmark}
+      src={logo}
       alt="PricePoka Logo"
       className="mx-auto mb-4 h-16 w-auto"
     />
+    <h1 className="text-3xl gradient-text font-semibold">PricePoka</h1>
     <p className="text-xs text-prime">Compare Prices Instantly</p>
   </header>
 
