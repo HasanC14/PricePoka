@@ -2,7 +2,7 @@ import ProductSearch from "./ProductSearch";
 import Footer from "./Footer";
 import { useEffect } from "react";
 import axios from "axios";
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.png";
 
 
 function HomePage() {
@@ -31,7 +31,7 @@ function HomePage() {
 >
   <header className="text-center mb-10">
     <img
-      src="/logo.jpg"
+      src="/logo.png"
       alt="PricePoka Logo"
       className="mx-auto mb-4 h-16 w-auto"
     />
