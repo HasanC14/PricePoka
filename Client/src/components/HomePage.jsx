@@ -36,7 +36,6 @@ function HomePage() {
       alt="PricePoka Logo"
       className="mx-auto mb-4 h-16 w-auto"
     />
-    <h1 className="text-3xl gradient-text font-semibold">PricePoka</h1>
     <p className="text-xs text-prime">Compare Prices Instantly</p>
   </header>
 
