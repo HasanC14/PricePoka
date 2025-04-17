@@ -2,6 +2,8 @@ import ProductSearch from "./ProductSearch";
 import Footer from "./Footer";
 import { useEffect } from "react";
 import axios from "axios";
+import logo from "../assets/logo.jpg";
+
 
 function HomePage() {
   // const namespace = "pricechecker";
@@ -23,21 +25,28 @@ function HomePage() {
   //   fetchVisitors();
   // }, []);
   return (
-    <div
-      id="visits"
-      className="flex flex-col items-center justify-center min-h-screen max-w-5xl mx-auto w-[90%] py-4"
-    >
-      <header className="text-center mb-10">
-        <h1 className="text-3xl gradient-text font-semibold">PricePoka</h1>
-        <p className="text-xs text-prime">Compare Prices Instantly</p>
-      </header>
-      <main className="w-full">
-        <ProductSearch />
-      </main>
-      <footer>
-        <Footer />
-      </footer>
-    </div>
+<div
+  id="visits"
+  className="flex flex-col items-center justify-center min-h-screen max-w-5xl mx-auto w-[90%] py-4"
+>
+  <header className="text-center mb-10">
+    <img
+      src="/logo.jpg"
+      alt="PricePoka Logo"
+      className="mx-auto mb-4 h-16 w-auto"
+    />
+    <h1 className="text-3xl gradient-text font-semibold">PricePoka</h1>
+    <p className="text-xs text-prime">Compare Prices Instantly</p>
+  </header>
+
+  <main className="w-full">
+    <ProductSearch />
+  </main>
+
+  <footer>
+    <Footer />
+  </footer>
+</div>
   );
 }
 
