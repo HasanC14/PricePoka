@@ -31,7 +31,7 @@ function HomePage() {
 >
   <header className="text-center mb-10">
     <img
-      src="/logo.png"
+      src={logo}
       alt="PricePoka Logo"
       className="mx-auto mb-4 h-16 w-auto"
     />
