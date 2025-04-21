@@ -7,7 +7,7 @@ import ad from "../assets/AD.webp";
 import Binary from "../assets/binary.png";
 import SkyLand from "../assets/skyland.webp";
 
-import { FaTriangleExclamation, FaXmark } from "react-icons/fa6";
+import { FaArrowUp, FaTriangleExclamation, FaXmark } from "react-icons/fa6";
 import Card from "./Card";
 import Loader from "./Loader";
 
@@ -33,6 +33,7 @@ const ProductSearch = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [shops, setShops] = useState(null);
+  console.log("🚀 ~ ProductSearch ~ shops:", shops)
   const [error, setError] = useState(null);
   const [currentPages, setCurrentPages] = useState({});
   const [perPage, setPerPage] = useState(8);
@@ -41,6 +42,7 @@ const ProductSearch = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isFocused, setIsFocused] = useState(false)
+  const [sortedBy, setSortedBy] = useState("asc")
 
   useEffect(() => {
     const loaded = loadSuggestions();
@@ -65,6 +67,31 @@ const ProductSearch = () => {
   const handleResetSuggestions = () => {
     localStorage.setItem(SUGGESTION_KEY, JSON.stringify([]))
     setSuggestions([])
+  }
+
+  const handleSortByPrice = (selectedShop, type) => {
+    setShops(prev => {
+      const updated = [...prev]
+      const matchedShop = updated.find(s => s.name === selectedShop.name)
+      matchedShop.products.sort((a, b) => {
+        // remove commas and non‑numeric chars 
+        const cleanA = a.price.replace(/,/g, '').replace(/[^\d.]/g, '')
+        const cleanB = b.price.replace(/,/g, '').replace(/[^\d.]/g, '')
+
+        const priceA = parseFloat(cleanA)
+        const priceB = parseFloat(cleanB)
+
+        if (isNaN(priceA) || isNaN(priceB)) return 0
+        console.log({ priceA, priceB })
+        // ascending order
+        if (type === 'asc') {
+          return priceA - priceB
+        } else {
+          return priceB - priceA
+        }
+      })
+      return updated
+    })
   }
 
   useEffect(() => {
@@ -340,7 +367,13 @@ const ProductSearch = () => {
                     alt={shop.name}
                     className="w-16 h-16 object-contain"
                   />
-                  {shop?.products?.length ? <p className="font-medium text-gray-500">{shop?.products?.length} {shop?.products?.length > 1 ? "products" : "product"}</p> : null}
+                  <div className="flex gap-2">
+                    {shop?.products?.length > 0 && <button onClick={() => {
+                      setSortedBy(prev => prev === 'asc' ? 'desc' : 'asc')
+                      handleSortByPrice(shop, sortedBy)
+                    }} className="text-white font-medium text-xs flex items-center gap-2 gradient-btn rounded px-2">Price <FaArrowUp className={`${sortedBy === 'asc' ? "rotate-0" : "rotate-180"} transition duration-200`} /></button>}
+                    {shop?.products?.length ? <p className="font-medium text-gray-500">{shop?.products?.length} {shop?.products?.length > 1 ? "products" : "product"}</p> : null}
+                  </div>
                 </div>
 
                 {paginatedProducts?.length === 0 ? (
