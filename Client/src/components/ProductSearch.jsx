@@ -99,7 +99,7 @@ const ProductSearch = () => {
 
 
 
-  const handleSearch = async () => {
+  const handleSearch = async (input) => {
     setIsLoading(true);
     setShops(null);
     setError(null);
@@ -107,7 +107,7 @@ const ProductSearch = () => {
     handleLocalStorageSearchSuggestion();
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/scrape/${inputValue}`
+        `${import.meta.env.VITE_API_BASE_URL}/scrape/${input || inputValue}`
       );
 
       if (!response.ok) {
@@ -188,7 +188,7 @@ const ProductSearch = () => {
               <button
                 type="submit"
                 className="text-white absolute end-2.5 bottom-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-20 py-2 gradient-btn"
-                onClick={() => handleSearch(true)}
+                onClick={handleSearch}
                 disabled={isLoading || !inputValue.trim()}
               >
                 {isLoading ? <Loader /> : "Search"}
@@ -207,15 +207,17 @@ const ProductSearch = () => {
                 <p>Recent Search</p>
                 {!isLoading && <button className="hover:text-white transition duration-200" disabled={isLoading} type="button" onClick={handleResetSuggestions}>Reset</button>}
               </div>
-              {suggestions.map((item) => (
+              {suggestions.map((suggestion) => (
                 <li
                   onClick={() => {
-                    setInputValue(item)
+                    if (isLoading) return;
+                    setInputValue(suggestion)
+                    handleSearch(suggestion)
                   }}
-                  key={item}
-                  className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                  key={suggestion}
+                  className={`px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer ${isLoading ? "pointer-events-none" : ""}`}
                 >
-                  {item}
+                  {suggestion}
                 </li>
               ))}
             </ul> : null}
