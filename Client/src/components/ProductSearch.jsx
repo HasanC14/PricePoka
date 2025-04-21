@@ -1,17 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
 import SkeletonCard from "./SkeletonCard";
 
+import ad from "../assets/AD.webp";
 import Binary from "../assets/binary.png";
 import SkyLand from "../assets/skyland.webp";
-import ad from "../assets/AD.webp";
 
-import { FaCircleInfo, FaXmark, FaTriangleExclamation } from "react-icons/fa6";
-import Loader from "./Loader";
+import { FaTriangleExclamation, FaXmark } from "react-icons/fa6";
 import Card from "./Card";
+import Loader from "./Loader";
+
+const SUGGESTION_KEY = 'ppk‑suggestions';
+
+function loadSuggestions() {
+  const raw = localStorage.getItem(SUGGESTION_KEY) ?? '[]';
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    console.warn('Corrupted suggestions, resetting');
+    return [];
+  }
+}
 
 const ProductSearch = () => {
   const [inputValue, setInputValue] = useState("");
@@ -23,6 +34,33 @@ const ProductSearch = () => {
   const [showInStockOnly, setShowInStockOnly] = useState(false);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [isFocused, setIsFocused] = useState(false)
+
+  useEffect(() => {
+    const loaded = loadSuggestions();
+    setSuggestions(loaded);
+    if (loaded.length === 0) {
+      localStorage.setItem(SUGGESTION_KEY, JSON.stringify([]));
+    }
+  }, []);
+
+  const handleLocalStorageSearchSuggestion = () => {
+    const val = inputValue.trim();
+    if (!val) return;
+
+    const stored = loadSuggestions();
+    if (stored.includes(val)) return;
+
+    const updated = [val, ...stored].slice(0, 5);
+    setSuggestions(updated);
+    localStorage.setItem(SUGGESTION_KEY, JSON.stringify(updated));
+  };
+
+  const handleResetSuggestions = () => {
+    localStorage.setItem(SUGGESTION_KEY, JSON.stringify([]))
+    setSuggestions([])
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -39,6 +77,7 @@ const ProductSearch = () => {
     handleResize(); // set on mount
     window.addEventListener("resize", handleResize);
   }, []);
+
   useEffect(() => {
     const savedInput = localStorage.getItem("lastSearchInput");
     const savedResults = localStorage.getItem("lastSearchResults");
@@ -49,6 +88,7 @@ const ProductSearch = () => {
 
     if (!isExpired && savedInput && savedResults) {
       setInputValue(savedInput);
+      setSuggestions(loadSuggestions().filter(sug => sug.toLowerCase().includes(savedInput.trim().toLowerCase())))
       setShops(JSON.parse(savedResults));
     } else {
       localStorage.removeItem("lastSearchInput");
@@ -57,11 +97,14 @@ const ProductSearch = () => {
     }
   }, []);
 
+
+
   const handleSearch = async () => {
     setIsLoading(true);
     setShops(null);
     setError(null);
 
+    handleLocalStorageSearchSuggestion();
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/scrape/${inputValue}`
@@ -89,6 +132,7 @@ const ProductSearch = () => {
       setError("Unable to connect to server. Please try again later.");
     } finally {
       setIsLoading(false);
+      setIsFocused(false);
     }
   };
   const clearSearch = () => {
@@ -125,9 +169,17 @@ const ProductSearch = () => {
                 </svg>
               </div>
               <input
+                autoComplete="off"
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setTimeout(() => setIsFocused(false), 100)}
                 type="search"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => {
+                  if (!isFocused) setIsFocused(true)
+                  const val = e.target.value
+                  setInputValue(val)
+                  setSuggestions(loadSuggestions().filter(sug => sug.toLowerCase().includes(val.trim().toLowerCase())))
+                }}
                 id="default-search"
                 className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Khoj the Search..."
@@ -150,6 +202,23 @@ const ProductSearch = () => {
                 <FaXmark />
               </button>
             </div>
+            {isFocused && suggestions.length > 0 ? <ul className="absolute z-50 mt-1 w-fit min-w-60 lg:min-w-96 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-b-lg shadow-lg">
+              <div className="flex justify-between text-xs p-4 text-gray-500 font-thin">
+                <p>Recent Search</p>
+                {!isLoading && <button className="hover:text-white transition duration-200" disabled={isLoading} type="button" onClick={handleResetSuggestions}>Reset</button>}
+              </div>
+              {suggestions.map((item) => (
+                <li
+                  onClick={() => {
+                    setInputValue(item)
+                  }}
+                  key={item}
+                  className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul> : null}
           </form>
         </div>
         <a
@@ -264,8 +333,8 @@ const ProductSearch = () => {
                       shop.name === "Binary"
                         ? Binary
                         : shop.name === "SkyLand"
-                        ? SkyLand
-                        : shop.logo
+                          ? SkyLand
+                          : shop.logo
                     }
                     alt={shop.name}
                     className="w-16 h-16 object-contain"
@@ -295,11 +364,10 @@ const ProductSearch = () => {
                             [shopIndex]: i + 1,
                           }))
                         }
-                        className={`px-3 py-1 text-sm rounded ${
-                          page === i + 1
-                            ? "bg-blue-600 text-white"
-                            : "gradient-btn text-white hover:bg-gray-300"
-                        }`}
+                        className={`px-3 py-1 text-sm rounded ${page === i + 1
+                          ? "bg-blue-600 text-white"
+                          : "gradient-btn text-white hover:bg-gray-300"
+                          }`}
                       >
                         {i + 1}
                       </button>

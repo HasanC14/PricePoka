@@ -1,9 +1,11 @@
 // context/CompareContext.js
 import { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router";
 
 const CompareContext = createContext();
 
 export const CompareProvider = ({ children }) => {
+  const navigate = useNavigate()
   const [compareList, setCompareList] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -17,11 +19,16 @@ export const CompareProvider = ({ children }) => {
   };
 
   const removeFromCompare = (id) => {
-    setCompareList((prev) => prev.filter((item) => item.id !== id));
+    setCompareList((prev) => {
+      // redirect to home page if nothing in compare list
+      if (prev.length === 1) navigate("/")
+      return prev.filter((item) => item.id !== id)
+    });
   };
 
   const removeAllFromCompare = () => {
     setCompareList([]);
+    navigate("/")
   };
 
   return (

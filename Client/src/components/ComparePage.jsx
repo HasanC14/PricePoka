@@ -1,17 +1,17 @@
-import { useCompare } from "../context/CompareContext";
-import Binary from "../assets/binary.png";
-import StarTech from "../assets/startech.png";
-import Ryans from "../assets/rayans.svg";
-import PCHouse from "../assets/pchousew.webp";
-import TechLand from "../assets/techland.webp";
-import Ultra from "../assets/ultra.webp";
-import Skyland from "../assets/skyland.webp";
-import Vibegaming from "../assets/vibegaming.png";
-import potaka from "../assets/potaka.webp";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import ad from "../assets/AD.webp";
+import Binary from "../assets/binary.png";
+import PCHouse from "../assets/pchousew.webp";
+import potaka from "../assets/potaka.webp";
+import Ryans from "../assets/rayans.svg";
+import Skyland from "../assets/skyland.webp";
+import StarTech from "../assets/startech.png";
+import TechLand from "../assets/techland.webp";
+import Ultra from "../assets/ultra.webp";
+import Vibegaming from "../assets/vibegaming.png";
+import { useCompare } from "../context/CompareContext";
 export default function ComparePage() {
   const { compareList, removeFromCompare, removeAllFromCompare } = useCompare();
   // Extract domain for merchant display
@@ -113,7 +113,7 @@ export default function ComparePage() {
                 return (
                   <tr key={product?.id} className="border-t">
                     <td className="p-2 font-medium ">
-                      {}
+                      { }
                       <div className="p-2  rounded-lg">
                         {getMerchantName(product?.link) === "binarylogic" && (
                           <img
