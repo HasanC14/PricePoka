@@ -14,8 +14,8 @@ import Loader from "./Loader";
 const SUGGESTION_KEY = 'ppk‑suggestions';
 
 const shopLogos = {
-  Binary: Binary,
-  SkyLand: SkyLand,
+  Binary,
+  SkyLand,
 }
 
 function loadSuggestions() {
@@ -108,7 +108,7 @@ const ProductSearch = () => {
     setIsLoading(true);
     setShops(null);
     setError(null);
-    
+
     handleLocalStorageSearchSuggestion();
     try {
       const response = await fetch(
