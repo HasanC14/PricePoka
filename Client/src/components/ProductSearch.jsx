@@ -13,6 +13,11 @@ import Loader from "./Loader";
 
 const SUGGESTION_KEY = 'ppk‑suggestions';
 
+const shopLogos = {
+  Binary,
+  SkyLand,
+}
+
 function loadSuggestions() {
   const raw = localStorage.getItem(SUGGESTION_KEY) ?? '[]';
   try {
@@ -99,7 +104,7 @@ const ProductSearch = () => {
 
 
 
-  const handleSearch = async () => {
+  const handleSearch = async (input) => {
     setIsLoading(true);
     setShops(null);
     setError(null);
@@ -107,7 +112,7 @@ const ProductSearch = () => {
     handleLocalStorageSearchSuggestion();
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/scrape/${inputValue}`
+        `${import.meta.env.VITE_API_BASE_URL}/scrape/${input}`
       );
 
       if (!response.ok) {
@@ -124,7 +129,7 @@ const ProductSearch = () => {
 
       const data = await response.json();
       setShops(data);
-      localStorage.setItem("lastSearchInput", inputValue);
+      localStorage.setItem("lastSearchInput", input);
       localStorage.setItem("lastSearchResults", JSON.stringify(data));
       localStorage.setItem("lastSearchTime", Date.now().toString());
     } catch (err) {
@@ -188,7 +193,7 @@ const ProductSearch = () => {
               <button
                 type="submit"
                 className="text-white absolute end-2.5 bottom-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-20 py-2 gradient-btn"
-                onClick={() => handleSearch(true)}
+                onClick={() => handleSearch(inputValue)}
                 disabled={isLoading || !inputValue.trim()}
               >
                 {isLoading ? <Loader /> : "Search"}
@@ -207,15 +212,17 @@ const ProductSearch = () => {
                 <p>Recent Search</p>
                 {!isLoading && <button className="hover:text-white transition duration-200" disabled={isLoading} type="button" onClick={handleResetSuggestions}>Reset</button>}
               </div>
-              {suggestions.map((item) => (
+              {suggestions.map((suggestion) => (
                 <li
                   onClick={() => {
-                    setInputValue(item)
+                    if (isLoading) return;
+                    setInputValue(suggestion)
+                    handleSearch(suggestion)
                   }}
-                  key={item}
-                  className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                  key={suggestion}
+                  className={`px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer ${isLoading ? "pointer-events-none" : ""}`}
                 >
-                  {item}
+                  {suggestion}
                 </li>
               ))}
             </ul> : null}
@@ -327,18 +334,13 @@ const ProductSearch = () => {
                 key={shopIndex}
                 className={`${shopIndex !== 0 ? "my-8" : ""}`}
               >
-                <div className="flex items-center space-x-3 mb-4">
+                <div className="flex items-center justify-between space-x-3 mb-4">
                   <img
-                    src={
-                      shop.name === "Binary"
-                        ? Binary
-                        : shop.name === "SkyLand"
-                          ? SkyLand
-                          : shop.logo
-                    }
+                    src={shop.name in shopLogos ? shopLogos[shop.name] : shop.logo}
                     alt={shop.name}
                     className="w-16 h-16 object-contain"
                   />
+                  {shop?.products?.length ? <p className="font-medium text-gray-500">{shop?.products?.length} {shop?.products?.length > 1 ? "products" : "product"}</p> : null}
                 </div>
 
                 {paginatedProducts?.length === 0 ? (
