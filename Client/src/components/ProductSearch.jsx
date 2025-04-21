@@ -33,7 +33,6 @@ const ProductSearch = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [shops, setShops] = useState(null);
-  console.log("🚀 ~ ProductSearch ~ shops:", shops)
   const [error, setError] = useState(null);
   const [currentPages, setCurrentPages] = useState({});
   const [perPage, setPerPage] = useState(8);
@@ -82,10 +81,10 @@ const ProductSearch = () => {
         const priceB = parseFloat(cleanB)
 
         if (isNaN(priceA) || isNaN(priceB)) return 0
-        console.log({ priceA, priceB })
         // ascending order
         if (type === 'asc') {
           return priceA - priceB
+          // descending order
         } else {
           return priceB - priceA
         }
