@@ -13,6 +13,11 @@ import Loader from "./Loader";
 
 const SUGGESTION_KEY = 'ppk‑suggestions';
 
+const shopLogos = {
+  Binary: Binary,
+  SkyLand: SkyLand,
+}
+
 function loadSuggestions() {
   const raw = localStorage.getItem(SUGGESTION_KEY) ?? '[]';
   try {
@@ -329,18 +334,13 @@ const ProductSearch = () => {
                 key={shopIndex}
                 className={`${shopIndex !== 0 ? "my-8" : ""}`}
               >
-                <div className="flex items-center space-x-3 mb-4">
+                <div className="flex items-center justify-between space-x-3 mb-4">
                   <img
-                    src={
-                      shop.name === "Binary"
-                        ? Binary
-                        : shop.name === "SkyLand"
-                          ? SkyLand
-                          : shop.logo
-                    }
+                    src={shop.name in shopLogos ? shopLogos[shop.name] : shop.logo}
                     alt={shop.name}
                     className="w-16 h-16 object-contain"
                   />
+                  {shop?.products?.length ? <p className="font-medium text-gray-500">{shop?.products?.length} {shop?.products?.length > 1 ? "products" : "product"}</p> : null}
                 </div>
 
                 {paginatedProducts?.length === 0 ? (
