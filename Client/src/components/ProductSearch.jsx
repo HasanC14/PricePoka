@@ -108,11 +108,11 @@ const ProductSearch = () => {
     setIsLoading(true);
     setShops(null);
     setError(null);
-
+    
     handleLocalStorageSearchSuggestion();
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/scrape/${input || inputValue}`
+        `${import.meta.env.VITE_API_BASE_URL}/scrape/${input}`
       );
 
       if (!response.ok) {
@@ -129,7 +129,7 @@ const ProductSearch = () => {
 
       const data = await response.json();
       setShops(data);
-      localStorage.setItem("lastSearchInput", inputValue);
+      localStorage.setItem("lastSearchInput", input);
       localStorage.setItem("lastSearchResults", JSON.stringify(data));
       localStorage.setItem("lastSearchTime", Date.now().toString());
     } catch (err) {
@@ -193,7 +193,7 @@ const ProductSearch = () => {
               <button
                 type="submit"
                 className="text-white absolute end-2.5 bottom-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-20 py-2 gradient-btn"
-                onClick={handleSearch}
+                onClick={() => handleSearch(inputValue)}
                 disabled={isLoading || !inputValue.trim()}
               >
                 {isLoading ? <Loader /> : "Search"}
