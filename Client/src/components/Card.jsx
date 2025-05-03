@@ -22,7 +22,7 @@ export default function Card({ product }) {
   const price = extractNumbersFromString(product?.price);
 
   return (
-    <div className="bg_glass rounded-lg overflow-hidden shadow-md text-prime p-4 space-y-2">
+    <div className="bg_glass rounded-lg overflow-hidden shadow-md text-prime p-4 flex flex-col justify-between">
       <a
         href={product.link}
         target="_blank"
@@ -48,7 +48,7 @@ export default function Card({ product }) {
         </div>
 
         <h6 className="text-xs text-left pt-2">{product?.name}</h6>
-        <p className="text-l font-semibold gradient-text text-left">
+        <p className="text-l font-semibold gradient-text text-left py-2">
           {price === "Out Of Stock" || price === 0
             ? "Out Of Stock"
             : `${price}৳`}
