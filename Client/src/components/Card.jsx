@@ -56,7 +56,7 @@ export default function Card({ product }) {
       <button
         onClick={() => addToCompare(product)}
         className={`rounded-sm py-2 w-full text-xs md:text-base text-white hover:bg-blue-800 ${
-          alreadyAdded ? "bg-blue-800 cursor-not-allowed" : "bg-blue-600"
+          alreadyAdded ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600"
         }`}
         disabled={alreadyAdded}
       >

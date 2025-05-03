@@ -1,4 +1,5 @@
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import ad from "../assets/3.webp";
@@ -12,8 +13,10 @@ import TechLand from "../assets/techland.webp";
 import Ultra from "../assets/ultra.webp";
 import Vibegaming from "../assets/vibegaming.png";
 import { useCompare } from "../context/CompareContext";
+import Breadcrumb from "./Breadcrumb";
 export default function ComparePage() {
   const { compareList, removeFromCompare, removeAllFromCompare } = useCompare();
+  const navigate = useNavigate();
   // Extract domain for merchant display
   function getMerchantName(link) {
     try {
@@ -40,7 +43,7 @@ export default function ComparePage() {
 
   if (compareList?.length === 0) {
     return (
-      <div className="p-8 text-center text-lg text-gray-600 flex flex-col justify-center items-center">
+      <div className="p-8 text-center text-lg text-gray-600 flex flex-col justify-center items-center max-w-7xl w-full mx-auto">
         No products in compare list.{" "}
         <Link
           to="/"
@@ -56,7 +59,13 @@ export default function ComparePage() {
   const referenceProduct = compareList[0];
 
   return (
-    <div className="p-6 flex flex-col">
+    <div className="p-6 flex flex-col max-w-7xl w-full mx-auto">
+      <button
+        onClick={() => navigate(-1)}
+        className="text-blue-600 hover:underline mb-4"
+      >
+        ← Go Back
+      </button>
       <Link
         to="/"
         className="flex mb-6 gap-4 items-center gradient-text font-bold"

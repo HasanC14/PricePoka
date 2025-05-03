@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SkeletonCard from "./SkeletonCard";
 import Card from "./Card";
@@ -18,6 +18,7 @@ const SearchPage = () => {
   const [shops, setShops] = useState([]);
   const [error, setError] = useState(null);
   const [showFilters, setShowFilters] = useState(false); // Manage filter visibility
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   // Filters
   const [selectedShops, setSelectedShops] = useState([]);
@@ -27,10 +28,24 @@ const SearchPage = () => {
 
   // Pagination state
   const [currentPages, setCurrentPages] = useState({});
+  const recentSearches =
+    JSON.parse(localStorage.getItem("recentSearches")) || [];
+
+  // Ref for search input and dropdown
+  const searchInputRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     if (query) {
-      handleSearch(query);
+      const cachedData = localStorage.getItem(query); // Check if search results are cached
+      if (cachedData) {
+        setShops(JSON.parse(cachedData)); // Use cached data
+        const cachedShops = JSON.parse(cachedData);
+        const shopNames = cachedShops.map((shop) => shop.name);
+        setSelectedShops(shopNames); // Set selected shops from cached data
+      } else {
+        handleSearch(query); // If no cached data, fetch from API
+      }
     }
   }, [query]);
 
@@ -45,15 +60,56 @@ const SearchPage = () => {
         throw new Error("Fetch failed");
       }
       const data = await response.json();
+
+      // Set the shops state with the fetched data
       setShops(data);
+
+      // Create an array of shop names and update the selectedShops state
       const shopNames = data.map((shop) => shop.name);
-      setSelectedShops(shopNames); // Select all shops initially
+      setSelectedShops(shopNames);
+
+      // Store the fetched data in localStorage to persist the search result
+      localStorage.setItem(searchInput, JSON.stringify(data)); // Save data for future use
+
+      // Update recent searches in localStorage
+      updateRecentSearches(searchInput);
     } catch (err) {
       console.error("Fetch error:", err);
       setError("Unable to connect to server. Please try again later.");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const updateRecentSearches = (searchInput) => {
+    const now = Date.now(); // Get the current timestamp
+
+    // Clear searches if more than 1 day has passed
+    const lastUpdated = localStorage.getItem("lastUpdated");
+    if (lastUpdated && now - lastUpdated > 24 * 60 * 60 * 1000) {
+      localStorage.removeItem("recentSearches");
+    }
+
+    // Get the current recent searches from localStorage (or initialize as an empty array)
+    const recentSearches =
+      JSON.parse(localStorage.getItem("recentSearches")) || [];
+
+    // Remove the search input if it already exists to avoid duplicates
+    const filteredSearches = recentSearches.filter(
+      (item) => item !== searchInput
+    );
+
+    // Add the new search at the start
+    filteredSearches.unshift(searchInput);
+
+    // Limit the array to the last 5 searches
+    const limitedSearches = filteredSearches.slice(0, 5);
+
+    // Store the updated list of recent searches in localStorage
+    localStorage.setItem("recentSearches", JSON.stringify(limitedSearches));
+
+    // Update the timestamp of the last time the search history was updated
+    localStorage.setItem("lastUpdated", now);
   };
 
   const handleSubmit = (e) => {
@@ -88,6 +144,27 @@ const SearchPage = () => {
     }
   };
 
+  // Handle click outside of search box and dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        !searchInputRef.current.contains(event.target)
+      ) {
+        setDropdownVisible(false); // Close the dropdown when clicking outside
+      }
+    };
+
+    // Add event listener
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup listener
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="px-4 py-8 grid grid-cols-12 gap-6 max-w-7xl w-full mx-auto ">
       {/* Search bar at the very top */}
@@ -98,7 +175,7 @@ const SearchPage = () => {
         >
           Search
         </label>
-        <div className="relative ">
+        <div className="relative">
           <div className="absolute inset-y-0 left-3 flex items-center ps-3 pointer-events-none">
             <svg
               className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -122,7 +199,10 @@ const SearchPage = () => {
             className="block w-full p-6 ps-12 text-sm text-gray-900 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             placeholder="Khoj the search..."
             required
+            value={inputValue}
+            onFocus={() => setDropdownVisible(true)} // Show dropdown on focus
             onChange={(e) => setInputValue(e.target.value)}
+            ref={searchInputRef} // Add ref to the search input
           />
           <button
             type="submit"
@@ -130,6 +210,26 @@ const SearchPage = () => {
           >
             {isLoading ? <Loader /> : "Search"}
           </button>
+
+          {/* Dropdown for recent searches */}
+          {dropdownVisible && recentSearches.length > 0 && (
+            <div
+              ref={dropdownRef} // Add ref to the dropdown
+              className="absolute z-10 bg-white shadow-md w-full mt-1 rounded-md max-h-60 overflow-y-auto"
+            >
+              <ul>
+                {recentSearches.map((search, index) => (
+                  <li
+                    key={index}
+                    onClick={() => setInputValue(search)} // Update search input on click
+                    className="cursor-pointer px-4 py-2 text-sm hover:bg-blue-100"
+                  >
+                    {search}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </form>
 
