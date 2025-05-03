@@ -22,17 +22,16 @@ export default function Card({ product }) {
   const price = extractNumbersFromString(product?.price);
 
   return (
-    <div className="bg_glass rounded-lg overflow-hidden shadow-md text-prime p-4 space-y-2">
+    <div className="rounded-md overflow-hidden shadow-md text-prime p-4 space-y-2 text-black bg-gray-100">
       <a
         href={product.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="block "
+        className="block"
         title={product?.name}
       >
-        <div className="w-full h-40 bg-white rounded-lg hover:scale-[103%] transition-all ease-in-out duration-500 ">
+        <div className="w-full h-32 bg-white rounded-md hover:scale-[103%] transition-all ease-in-out duration-500">
           <img
-            // src={product?.img ? product?.img : placeholder}
             src={
               product?.img && !product.img.includes("skyland")
                 ? product.img
@@ -41,27 +40,27 @@ export default function Card({ product }) {
             alt={product?.name}
             className={`${
               product?.img.includes("skyland")
-                ? "object-cover rounded-lg"
-                : " object-contain"
-            }   h-full w-full `}
+                ? "object-cover rounded-md"
+                : "object-contain"
+            } h-full w-full`}
           />
         </div>
 
         <h6 className="text-xs text-left pt-2">{product?.name}</h6>
-        <p className="text-l font-semibold gradient-text text-left">
+        <p className="text-lg font-semibold text-blue-600 text-left mt-2">
           {price === "Out Of Stock" || price === 0
             ? "Out Of Stock"
-            : `${price}৳`}
+            : `${price.toLocaleString("en-BD")}৳`}
         </p>
       </a>
       <button
         onClick={() => addToCompare(product)}
-        className={`rounded-md py-2 w-full text-xs md:text-md lg:text-[16px] ${
-          alreadyAdded ? "bg-gray-400 cursor-not-allowed" : "gradient-btn"
+        className={`rounded-sm py-2 w-full text-xs md:text-base text-white hover:bg-blue-800 ${
+          alreadyAdded ? "bg-blue-800 cursor-not-allowed" : "bg-blue-600"
         }`}
         disabled={alreadyAdded}
       >
-        {alreadyAdded ? "Already in compare" : "Add to compare"}
+        {alreadyAdded ? "Added to compare" : "Add to compare"}
       </button>
     </div>
   );
