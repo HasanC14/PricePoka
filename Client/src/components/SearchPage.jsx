@@ -4,6 +4,7 @@ import SkeletonCard from "./SkeletonCard";
 import Card from "./Card";
 import Loader from "./Loader";
 import { Range } from "react-range";
+import SearchBar from "./SearchBox";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -19,7 +20,8 @@ const SearchPage = () => {
   const [error, setError] = useState(null);
   const [showFilters, setShowFilters] = useState(false); // Manage filter visibility
   const [dropdownVisible, setDropdownVisible] = useState(false);
-
+  // In your SearchPage component, replace the old sortOrder state with this:
+  const [sortOrders, setSortOrders] = useState({}); // e.g., { "ShopA": "price-asc", "ShopB": "default" }
   // Filters
   const [selectedShops, setSelectedShops] = useState([]);
   const [showInStockOnly, setShowInStockOnly] = useState(false);
@@ -87,7 +89,8 @@ const SearchPage = () => {
     // Clear searches if more than 1 day has passed
     const lastUpdated = localStorage.getItem("lastUpdated");
     if (lastUpdated && now - lastUpdated > 24 * 60 * 60 * 1000) {
-      localStorage.removeItem("recentSearches");
+      localStorage.clear();
+      // localStorage.removeItem("recentSearches");
     }
 
     // Get the current recent searches from localStorage (or initialize as an empty array)
@@ -168,70 +171,7 @@ const SearchPage = () => {
   return (
     <div className="px-4 py-8 grid grid-cols-12 gap-6 max-w-7xl w-full mx-auto ">
       {/* Search bar at the very top */}
-      <form className="col-span-12" onSubmit={handleSubmit}>
-        <label
-          htmlFor="default-search"
-          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
-          Search
-        </label>
-        <div className="relative">
-          <div className="absolute inset-y-0 left-3 flex items-center ps-3 pointer-events-none">
-            <svg
-              className="w-4 h-4 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-full p-6 ps-12 text-sm text-gray-900 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Khoj the search..."
-            required
-            value={inputValue}
-            onFocus={() => setDropdownVisible(true)} // Show dropdown on focus
-            onChange={(e) => setInputValue(e.target.value)}
-            ref={searchInputRef} // Add ref to the search input
-          />
-          <button
-            type="submit"
-            className="text-white absolute right-2 bottom-[.6rem] bg-blue-600 hover:bg-blue-800 font-medium rounded-sm text-xl px-8 py-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            {isLoading ? <Loader /> : "Search"}
-          </button>
-
-          {/* Dropdown for recent searches */}
-          {dropdownVisible && recentSearches.length > 0 && (
-            <div
-              ref={dropdownRef} // Add ref to the dropdown
-              className="absolute z-10 bg-white shadow-md w-full mt-1 rounded-md max-h-60 overflow-y-auto"
-            >
-              <ul>
-                {recentSearches.map((search, index) => (
-                  <li
-                    key={index}
-                    onClick={() => setInputValue(search)} // Update search input on click
-                    className="cursor-pointer px-4 py-2 text-sm hover:bg-blue-100"
-                  >
-                    {search}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </form>
+      <SearchBar />
 
       {/* 2-column layout: Sidebar + Products */}
       <div className="grid grid-cols-12 col-span-12 gap-6 w-full">
@@ -250,12 +190,24 @@ const SearchPage = () => {
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {shops.map((shop, idx) => (
                   <div key={idx} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedShops.includes(shop.name)}
-                      onChange={() => toggleShop(shop.name)}
-                    />
-                    <label>{shop.name}</label>
+                    <div className="custom-checkbox">
+                      <input
+                        type="checkbox"
+                        id={`checkbox-${shop.name}`}
+                        checked={selectedShops.includes(shop.name)}
+                        onChange={() => toggleShop(shop.name)}
+                      />
+                      <label
+                        htmlFor={`checkbox-${shop.name}`}
+                        className="checkbox-label"
+                      ></label>
+                    </div>
+                    <label
+                      htmlFor={`checkbox-${shop.name}`}
+                      className="text-sm"
+                    >
+                      {shop.name}
+                    </label>
                   </div>
                 ))}
               </div>
@@ -285,16 +237,36 @@ const SearchPage = () => {
                 min={0}
                 max={389000}
                 values={values}
-                onChange={(values) => setValues(values)} // Update price when slider is changed
-                renderTrack={({ props, children }) => (
-                  <div {...props} className="w-full h-2 bg-gray-300 rounded-md">
-                    {children}
-                  </div>
-                )}
+                onChange={(values) => setValues(values)}
+                renderTrack={({ props, children }) => {
+                  const trackStyle = {
+                    position: "relative",
+                    width: "100%",
+                    height: "3px",
+                    background: `linear-gradient(to right, #3b82f6 ${(
+                      (values[0] / 389000) *
+                      100
+                    ).toFixed(2)}%, #e5e7eb ${(
+                      (values[1] / 389000) *
+                      100
+                    ).toFixed(2)}%)`,
+                    borderRadius: "9999px",
+                  };
+                  return (
+                    <div {...props} className="w-full" style={trackStyle}>
+                      {children}
+                    </div>
+                  );
+                }}
                 renderThumb={({ props }) => (
                   <div
                     {...props}
-                    className="w-6 h-6 rounded-full bg-blue-600 cursor-pointer"
+                    className="w-4 h-4 rounded-full bg-white border-4 border-blue-600 cursor-pointer"
+                    style={{
+                      boxSizing: "border-box",
+                      position: "absolute",
+                      top: "-2px",
+                    }}
                   />
                 )}
               />
@@ -318,7 +290,7 @@ const SearchPage = () => {
         {/* Filter Button for Mobile */}
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg z-20"
+          className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-md shadow-lg z-20"
         >
           Filter
         </button>
@@ -342,24 +314,44 @@ const SearchPage = () => {
               {shops
                 .filter((shop) => selectedShops.includes(shop.name))
                 .map((shop, idx) => {
-                  const products = (shop.products || []).filter((product) => {
-                    const price = extractPrice(product.price);
+                  // Locate this section in your code where you filter and sort products:
+                  // let products = (shop.products || []).filter(...);
+
+                  // Modify the sorting logic part as follows:
+
+                  let products = (shop.products || []).filter((product) => {
+                    const price = extractPrice(product.price); /* */
                     const inStock = !showInStockOnly || price > 0;
                     const aboveMin = !minPrice || price >= parseFloat(minPrice);
                     const belowMax = !maxPrice || price <= parseFloat(maxPrice);
-                    return inStock && aboveMin && belowMax;
+                    return inStock && aboveMin && belowMax; /* */
                   });
 
+                  // Add sorting logic here, using the shop-specific sort order:
+                  const currentShopSortOrder =
+                    sortOrders[shop.name] || "default"; // Get sort order for current shop
+
+                  if (currentShopSortOrder === "price-asc") {
+                    products.sort(
+                      (a, b) => extractPrice(a.price) - extractPrice(b.price)
+                    );
+                  } else if (currentShopSortOrder === "price-desc") {
+                    products.sort(
+                      (a, b) => extractPrice(b.price) - extractPrice(a.price)
+                    );
+                  }
+
+                  // The rest of your existing code for pagination will use the sorted 'products'
                   const isMobile = window.innerWidth < 768;
                   const page = currentPages[shop.name] || 1;
                   const perPage = isMobile ? 6 : 8;
-                  const totalPages = Math.ceil(products.length / perPage);
+                  const totalPages = Math.ceil(products.length / perPage); /* */
                   const paginatedProducts = products.slice(
                     (page - 1) * perPage,
                     page * perPage
-                  );
+                  ); /* */
 
-                  if (!products.length) return null;
+                  if (!products.length) return null; /* */
 
                   return (
                     <div key={idx} className="mb-12">
@@ -370,17 +362,44 @@ const SearchPage = () => {
                             <img
                               src={shop.logo}
                               alt={shop.name}
-                              className="h-10 w-14 object-contain"
+                              className="h-10 w-14 object-contain" /* */
                             />
-                            {paginatedProducts?.length ? (
-                              <p className="font-medium text-gray-500">
-                                Showing {paginatedProducts?.length} of{" "}
-                                {shop?.products?.length}{" "}
-                                {paginatedProducts?.length > 1
-                                  ? "products"
-                                  : "product"}
-                              </p>
-                            ) : null}
+                            <div className="flex items-center space-x-4">
+                              {" "}
+                              {/* Existing div */}
+                              {paginatedProducts?.length ? (
+                                <p className="font-medium text-gray-500">
+                                  Showing {paginatedProducts?.length} of{" "}
+                                  {shop?.products?.length}{" "}
+                                  {paginatedProducts?.length > 1
+                                    ? "products"
+                                    : "product"}{" "}
+                                  {/* */}
+                                </p>
+                              ) : null}
+                              {/* Updated Sort Dropdown */}
+                              {products.length > 0 && (
+                                <select
+                                  value={sortOrders[shop.name] || "default"} // Get sort order for the current shop
+                                  onChange={(e) => {
+                                    const newSortOrder = e.target.value;
+                                    setSortOrders((prevSortOrders) => ({
+                                      ...prevSortOrders,
+                                      [shop.name]: newSortOrder, // Set sort order for the specific shop
+                                    }));
+                                  }}
+                                  className="p-2 border border-gray-300 rounded-md text-sm"
+                                >
+                                  <option value="default">Sort by</option>
+                                  <option value="price-asc">
+                                    Price: Low to High
+                                  </option>
+                                  <option value="price-desc">
+                                    Price: High to Low
+                                  </option>
+                                </select>
+                              )}
+                            </div>
                           </>
                         )}
                       </div>
@@ -407,7 +426,7 @@ const SearchPage = () => {
                               className={`px-3 py-1 border rounded-full ${
                                 page === i + 1
                                   ? "bg-blue-600 text-white"
-                                  : "hover:bg-blue-100"
+                                  : "hover:bg-blue-200"
                               }`}
                             >
                               {i + 1}

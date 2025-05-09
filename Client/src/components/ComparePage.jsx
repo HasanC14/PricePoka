@@ -13,10 +13,23 @@ import TechLand from "../assets/techland.webp";
 import Ultra from "../assets/ultra.webp";
 import Vibegaming from "../assets/vibegaming.png";
 import { useCompare } from "../context/CompareContext";
+import placeholder from "../assets/place.jpg";
 import Breadcrumb from "./Breadcrumb";
 export default function ComparePage() {
   const { compareList, removeFromCompare, removeAllFromCompare } = useCompare();
   const navigate = useNavigate();
+
+  const logoMap = {
+    binarylogic: Binary,
+    startech: StarTech,
+    ryans: Ryans,
+    pchouse: PCHouse,
+    techlandbd: TechLand,
+    ultratech: Ultra,
+    skyland: Skyland,
+    vibegaming: Vibegaming,
+    potakait: potaka,
+  };
   // Extract domain for merchant display
   function getMerchantName(link) {
     try {
@@ -39,19 +52,17 @@ export default function ComparePage() {
     return priceA - priceB;
   });
 
-  console.log(sortedCompareList);
-
   if (compareList?.length === 0) {
     return (
       <div className="p-8 text-center text-lg text-gray-600 flex flex-col justify-center items-center max-w-7xl w-full mx-auto">
         No products in compare list.{" "}
-        <Link
-          to="/"
-          className="flex mb-6 gap-4 items-center gradient-text font-bold"
+        <button
+          onClick={() => navigate(-1)}
+          className="flex mb-4 gap-2 items-center text-blue-600 font-bold hover:underline"
         >
-          <FaArrowLeftLong className="text-[#087dc4]" />
-          Back to home page
-        </Link>
+          <FaArrowLeftLong />
+          Back to Search
+        </button>
       </div>
     );
   }
@@ -62,23 +73,14 @@ export default function ComparePage() {
     <div className="p-6 flex flex-col max-w-7xl w-full mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="text-blue-600 hover:underline mb-4"
+        className="md:text-sm text-xs flex mb-4 gap-2 items-center text-blue-600 font-bold hover:underline"
       >
-        ← Go Back
+        <FaArrowLeftLong className="" />
+        Back to Search
       </button>
-      <Link
-        to="/"
-        className="flex mb-6 gap-4 items-center gradient-text font-bold"
-      >
-        <FaArrowLeftLong className="text-[#087dc4]" />
-        Back to home page
-      </Link>
       {/* Title */}
-      <h1 className="text-2xl font-bold gradient-text mb-6">
-        {referenceProduct?.name}
-        {/* PricePoka */}
-      </h1>
-      <a href="https://ezplay.tech/" target="_blank" className="w-full mt-4">
+      <h1 className="md:text-4xl text-2xl  ">Compare</h1>
+      <a href="https://ezplay.tech/" target="_blank" className="w-full my-4">
         <img
           src={ad}
           alt="Advertisement"
@@ -93,137 +95,176 @@ export default function ComparePage() {
       </button> */}
 
       {/* Right - Merchant Table */}
-      <div className="shadow rounded overflow-hidden p-4 text-black overflow-x-auto">
-        <table className="w-full md:text-base text-sm table-auto">
-          <thead className=" text-left">
-            <tr className="">
-              <th className="p-3">Shop</th>
-              <th className="p-3 min-w-[200px]">Product Name</th>
-              <th className="p-3">Availability</th>
-              <th className="p-3">Price</th>
-              <th className="p-3"></th>
+      <div className="bg-white shadow-lg rounded-md overflow-hidden overflow-x-auto md:block hidden">
+        <table className="min-w-full divide-y divide-gray-200 table-auto">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                Shop
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                Product
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                Availability
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                Price
+              </th>
+              <th className="px-6 py-3"></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             {sortedCompareList.map((product) => {
-              const basePrice = getNumber(product?.price);
+              const merchant = getMerchantName(product.link);
+              const Logo = merchant ? logoMap[merchant] : null;
+              const basePrice = getNumber(product.price);
+
               return (
-                <tr key={product?.id} className="border-t">
-                  <td className="p-2 font-medium ">
-                    {}
-                    <div className="p-2  rounded-lg">
-                      {getMerchantName(product?.link) === "binarylogic" && (
-                        <img
-                          src={Binary}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain"
-                        />
-                      )}
-                      {getMerchantName(product?.link) === "startech" && (
-                        <img
-                          src={StarTech}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain"
-                        />
-                      )}
-                      {getMerchantName(product?.link) === "ryans" && (
-                        <img
-                          src={Ryans}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain"
-                        />
-                      )}
-                      {getMerchantName(product?.link) === "pchouse" && (
-                        <img
-                          src={PCHouse}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain"
-                        />
-                      )}
-                      {getMerchantName(product?.link) === "techlandbd" && (
-                        <img
-                          src={TechLand}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain bg-black p-1"
-                        />
-                      )}
-                      {getMerchantName(product?.link) === "ultratech" && (
-                        <img
-                          src={Ultra}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain"
-                        />
-                      )}
-                      {getMerchantName(product?.link) === "skyland" && (
-                        <img
-                          src={Skyland}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain"
-                        />
-                      )}
-                      {getMerchantName(product?.link) === "vibegaming" && (
-                        <img
-                          src={Vibegaming}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain"
-                        />
-                      )}
-                      {getMerchantName(product?.link) === "potakait" && (
-                        <img
-                          src={potaka}
-                          alt={getMerchantName(product?.link)}
-                          className="w-14 h-14 object-contain"
-                        />
-                      )}
+                <tr key={product.id}>
+                  {/* Shop */}
+                  <td className="md:px-6 md:py-4 px-4 py-2 whitespace-nowrap">
+                    {Logo ? (
+                      <img
+                        src={Logo}
+                        alt={merchant}
+                        className="h-8 w-16 object-contain"
+                      />
+                    ) : (
+                      <span className="text-sm text-gray-500">Unknown</span>
+                    )}
+                  </td>
+
+                  {/* Product */}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={
+                          product.img && !product.img.includes("skyland")
+                            ? product.img
+                            : placeholder
+                        }
+                        alt={product.name}
+                        className="h-10 w-10 object-contain"
+                      />
+                      <span className="text-gray-900 text-sm">
+                        {product.name}
+                      </span>
                     </div>
                   </td>
-                  <td className="p-2 text-base flex gap-4 items-center">
-                    <img
-                      src={product?.img}
-                      alt=""
-                      className="w-16 h-16 object-contain"
-                    />
-                    {product?.name}
+
+                  {/* Availability */}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {product.price.toLowerCase().includes("stock")
+                      ? product.price
+                      : "In Stock"}
                   </td>
-                  <td className="p-2 ">
-                    {product?.price.toLowerCase().includes("stock")
-                      ? product?.price
-                      : "In stock"}
-                  </td>
-                  <td className="p-2 md:text-lg text-xs text-blue-600 font-bold">
+
+                  {/* Price */}
+                  <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900">
                     {basePrice
-                      ? `${basePrice.toLocaleString("en-BD")}৳`
+                      ? `${basePrice.toLocaleString("en-BD")} BDT`
                       : "N/A"}
                   </td>
-                  <td className="p-3">
-                    <div className="flex gap-3 items-center">
-                      <a
-                        href={product?.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-3 py-1 text-white rounded-sm bg-blue-600 hover:bg-blue-800 text-sm"
-                      >
-                        Buy
-                      </a>
-                      <button
-                        onClick={() => removeFromCompare(product?.id)}
-                        className="text-xs text-red-500 hover:underline"
-                      >
-                        Remove
-                      </button>
-                    </div>
+
+                  {/* Actions */}
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a
+                      href={product.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block px-3 py-1 bg-blue-600 rounded-sm text-white  hover:bg-blue-700"
+                    >
+                      Buy
+                    </a>
+                    <button
+                      onClick={() => removeFromCompare(product.id)}
+                      className="ml-4 text-red-500 hover:underline"
+                    >
+                      Remove
+                    </button>
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+      </div>
 
-        {/* Footnote like PCPartPicker */}
-        <div className="p-4 text-xs text-gray-500 border-t ps-0">
-          * Prices and availability are scraped and may change. Clicking "Buy"
-          will take you to the respective shop's website.
-        </div>
+      {/******* MOBILE: Card-style Compare**********/}
+      <div className="md:hidden space-y-4">
+        {sortedCompareList.map((product) => {
+          const merchant = getMerchantName(product.link);
+          const Logo = merchant ? logoMap[merchant] : null;
+          const basePrice = getNumber(product.price);
+
+          return (
+            <div
+              key={product.id}
+              className="bg-gray-100 rounded-md shadow-md p-4 space-y-3"
+            >
+              {/* 1) small thumb + name */}
+              <div className="flex items-center gap-3">
+                <img
+                  src={
+                    product.img && !product.img.includes("skyland")
+                      ? product.img
+                      : placeholder
+                  }
+                  alt={product.name}
+                  className="h-8 w-8 object-contain rounded"
+                />
+                <h6 className="text-sm font-medium text-gray-900">
+                  {product.name}
+                </h6>
+              </div>
+
+              {/* 3) availability */}
+
+              {/* 4) shop logo + price */}
+              <div className="flex justify-between items-center gap-2">
+                <div className="">
+                  <span className="text-lg font-semibold text-blue-600">
+                    {basePrice
+                      ? `${basePrice.toLocaleString("en-BD")}৳`
+                      : "N/A"}
+                  </span>{" "}
+                  <span className="text-xs text-gray-500 ms-2">
+                    {product.price.toLowerCase().includes("stock")
+                      ? product.price
+                      : "In Stock"}
+                  </span>
+                </div>
+
+                {Logo && (
+                  <img
+                    src={Logo}
+                    alt={merchant}
+                    className="h-6 w-auto object-contain"
+                  />
+                )}
+              </div>
+
+              {/* 5) actions */}
+              <div className="flex gap-2">
+                <a
+                  href={product.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 text-center px-3 py-2 bg-blue-600 text-white rounded-sm text-xs hover:bg-blue-800"
+                >
+                  Buy
+                </a>
+                <button
+                  onClick={() => removeFromCompare(product.id)}
+                  className="flex-1 text-center px-3 py-2 border border-red-500 text-red-500 rounded-sm text-xs hover:bg-red-50"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -22,12 +22,12 @@ export default function Card({ product }) {
   const price = extractNumbersFromString(product?.price);
 
   return (
-    <div className="rounded-md overflow-hidden shadow-md text-prime p-4 space-y-2 text-black bg-gray-100">
+    <div className="rounded-md overflow-hidden shadow-md text-prime p-4 space-y-2 text-black bg-gray-100 relative min-h-72">
       <a
         href={product.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="block"
+        className="block "
         title={product?.name}
       >
         <div className="w-full h-32 bg-white rounded-md hover:scale-[103%] transition-all ease-in-out duration-500">
@@ -46,7 +46,7 @@ export default function Card({ product }) {
           />
         </div>
 
-        <h6 className="text-xs text-left pt-2">{product?.name}</h6>
+        <h6 className="text-xs text-left pt-2 line-clamp-2">{product?.name}</h6>
         <p className="text-lg font-semibold text-blue-600 text-left mt-2">
           {price === "Out Of Stock" || price === 0
             ? "Out Of Stock"
@@ -55,7 +55,7 @@ export default function Card({ product }) {
       </a>
       <button
         onClick={() => addToCompare(product)}
-        className={`rounded-sm py-2 w-full text-xs md:text-base text-white hover:bg-blue-800 ${
+        className={`absolute bottom-4 left-4 right-4 w-auto rounded-sm py-2  text-xs md:text-base text-white hover:bg-blue-800 ${
           alreadyAdded ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600"
         }`}
         disabled={alreadyAdded}

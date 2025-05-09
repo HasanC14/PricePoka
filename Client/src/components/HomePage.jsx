@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "./SearchBox";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -15,19 +16,19 @@ function HomePage() {
     <div className="flex flex-col  justify-center w-full mx-auto  md:p-0 p-4">
       {/* Header Section */}
       <header className="text-center mb-8">
-        <h1 className="md:text-5xl text-3xl font-semibold text-black">
-          Build the <span className="text-blue-600">Best</span>, Pay the{" "}
+        <h1 className="md:text-4xl text-3xl font-semibold text-black">
+          Build the <span className="text-blue-600">Get</span>, Pay the{" "}
           <span className="text-blue-600">Least</span>
         </h1>
         <p className="md:text-lg text-sm text-gray-600 mt-4">
           PricePoka compares prices across top Bangladeshi retailers so you
-          never overpay on PC parts again.
+          never overpay.
         </p>
       </header>
 
       {/* Search Section */}
-      <main className=" mb-8">
-        <form className="max-w-6xl mx-auto" onSubmit={handleSubmit}>
+      <main className="mb-8">
+        {/* <form className="" onSubmit={handleSubmit}>
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -55,23 +56,24 @@ function HomePage() {
             <input
               type="search"
               id="default-search"
-              className="block w-full p-6 ps-12 text-sm text-gray-900 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="block w-full md:p-6 p-4 ps-12 md:ps-12 text-sm text-gray-900 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               placeholder="Khoj the search..."
               required
               onChange={(e) => setInputValue(e.target.value)}
             />
             <button
               type="submit"
-              className="text-white absolute right-2 bottom-[.6rem] bg-blue-600 hover:bg-blue-800 font-medium rounded-sm text-xl px-8 py-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white absolute md:text-xl text-md right-2 bottom-[.6rem] bg-blue-600 hover:bg-blue-800 font-medium rounded-sm md:px-8 px-4 md:py-3 py-1 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Search
             </button>
           </div>
-        </form>
+        </form> */}
+        <SearchBar />
       </main>
 
       {/* Feature Section */}
-      <div className="flex flex-wrap gap-8 text-lg text-gray-600 justify-center">
+      {/* <div className="flex flex-wrap gap-8 md:text-lg text-md text-gray-600 justify-center">
         <div className="flex items-center space-x-2">
           <span className="">
             <svg
@@ -168,7 +170,7 @@ function HomePage() {
           </span>
           <span>Build within budget</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

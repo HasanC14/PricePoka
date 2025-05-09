@@ -9,15 +9,16 @@ export default function Footer() {
               <span class="block text-sm  sm:text-center me-4">
                 Made with ❤️ by {""}
                 <a
-                  href="https://flowbite.com/"
+                  href="https://hasan-chowdhury.netlify.app/"
                   class="text-blue-600 hover:underline"
+                  target="_blank"
                 >
                   Hasan Chowdhury
                 </a>
               </span>
             </li>
           </ul>
-          <ul class="flex flex-wrap items-center  mb-6 text-2xl font-medium text-gray-500 sm:mb-0 ">
+          <ul class="flex flex-wrap items-center  md:mb-6 mb-0 text-2xl font-medium text-gray-500 ">
             <li>
               <a
                 href="https://github.com/HasanC14/PricePoka"
