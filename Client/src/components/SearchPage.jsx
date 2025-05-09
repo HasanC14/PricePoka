@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import SkeletonCard from "./SkeletonCard";
 import Card from "./Card";
-import Loader from "./Loader";
 import { Range } from "react-range";
 import SearchBar from "./SearchBox";
 
@@ -12,30 +11,22 @@ function useQuery() {
 
 const SearchPage = () => {
   const query = useQuery().get("query") || "";
-  const navigate = useNavigate();
-
-  const [inputValue, setInputValue] = useState(query);
   const [isLoading, setIsLoading] = useState(false);
   const [shops, setShops] = useState([]);
   const [error, setError] = useState(null);
-  const [showFilters, setShowFilters] = useState(false); // Manage filter visibility
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  // In your SearchPage component, replace the old sortOrder state with this:
-  const [sortOrders, setSortOrders] = useState({}); // e.g., { "ShopA": "price-asc", "ShopB": "default" }
+  // Manage filter visibility
+  const [showFilters, setShowFilters] = useState(false);
+
+  const [sortOrders, setSortOrders] = useState({});
   // Filters
   const [selectedShops, setSelectedShops] = useState([]);
   const [showInStockOnly, setShowInStockOnly] = useState(false);
-  const [values, setValues] = useState([0, 389000]); // Min and Max values
+  // Min and Max values
+  const [values, setValues] = useState([0, 389000]);
   const [minPrice, maxPrice] = values;
 
   // Pagination state
   const [currentPages, setCurrentPages] = useState({});
-  const recentSearches =
-    JSON.parse(localStorage.getItem("recentSearches")) || [];
-
-  // Ref for search input and dropdown
-  const searchInputRef = useRef(null);
-  const dropdownRef = useRef(null);
 
   useEffect(() => {
     if (query) {
@@ -62,16 +53,14 @@ const SearchPage = () => {
         throw new Error("Fetch failed");
       }
       const data = await response.json();
-
-      // Set the shops state with the fetched data
       setShops(data);
 
       // Create an array of shop names and update the selectedShops state
       const shopNames = data.map((shop) => shop.name);
       setSelectedShops(shopNames);
 
-      // Store the fetched data in localStorage to persist the search result
-      localStorage.setItem(searchInput, JSON.stringify(data)); // Save data for future use
+      // Store the fetched data in localStorage
+      localStorage.setItem(searchInput, JSON.stringify(data));
 
       // Update recent searches in localStorage
       updateRecentSearches(searchInput);
@@ -84,13 +73,13 @@ const SearchPage = () => {
   };
 
   const updateRecentSearches = (searchInput) => {
-    const now = Date.now(); // Get the current timestamp
+    // Get the current timestamp
+    const now = Date.now();
 
-    // Clear searches if more than 1 day has passed
+    // Clear localStorage if more than 1 day has passed
     const lastUpdated = localStorage.getItem("lastUpdated");
     if (lastUpdated && now - lastUpdated > 24 * 60 * 60 * 1000) {
       localStorage.clear();
-      // localStorage.removeItem("recentSearches");
     }
 
     // Get the current recent searches from localStorage (or initialize as an empty array)
@@ -115,12 +104,6 @@ const SearchPage = () => {
     localStorage.setItem("lastUpdated", now);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
-    navigate(`/search?query=${encodeURIComponent(inputValue.trim())}`);
-  };
-
   const toggleShop = (shopName) => {
     if (selectedShops.includes(shopName)) {
       setSelectedShops(selectedShops.filter((name) => name !== shopName));
@@ -139,45 +122,22 @@ const SearchPage = () => {
     if (isNaN(newValue)) return;
 
     if (index === 0) {
-      // Min value
       setValues([Math.min(newValue, maxPrice), maxPrice]);
     } else {
-      // Max value
       setValues([minPrice, Math.max(newValue, minPrice)]);
     }
   };
 
-  // Handle click outside of search box and dropdown
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        !searchInputRef.current.contains(event.target)
-      ) {
-        setDropdownVisible(false); // Close the dropdown when clicking outside
-      }
-    };
-
-    // Add event listener
-    document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup listener
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <div className="px-4 py-8 grid grid-cols-12 gap-6 max-w-7xl w-full mx-auto ">
-      {/* Search bar at the very top */}
+      {/* Search bar */}
       <SearchBar />
 
       {/* 2-column layout: Sidebar + Products */}
       <div className="grid grid-cols-12 col-span-12 gap-6 w-full">
         {/* Sidebar */}
         <div
-          className={`col-span-12 md:col-span-3 fixed top-0 right-0 bg-white p-6 transition-transform duration-300 ease-in-out md:relative open ${
+          className={`col-span-12 md:col-span-3 fixed -top-2 right-0 bg-white p-6 transition-transform duration-300 ease-in-out md:relative open ${
             showFilters
               ? "transform translate-x-0 "
               : "transform translate-x-full "
@@ -314,22 +274,16 @@ const SearchPage = () => {
               {shops
                 .filter((shop) => selectedShops.includes(shop.name))
                 .map((shop, idx) => {
-                  // Locate this section in your code where you filter and sort products:
-                  // let products = (shop.products || []).filter(...);
-
-                  // Modify the sorting logic part as follows:
-
                   let products = (shop.products || []).filter((product) => {
-                    const price = extractPrice(product.price); /* */
+                    const price = extractPrice(product.price);
                     const inStock = !showInStockOnly || price > 0;
                     const aboveMin = !minPrice || price >= parseFloat(minPrice);
                     const belowMax = !maxPrice || price <= parseFloat(maxPrice);
-                    return inStock && aboveMin && belowMax; /* */
+                    return inStock && aboveMin && belowMax;
                   });
 
-                  // Add sorting logic here, using the shop-specific sort order:
                   const currentShopSortOrder =
-                    sortOrders[shop.name] || "default"; // Get sort order for current shop
+                    sortOrders[shop.name] || "default";
 
                   if (currentShopSortOrder === "price-asc") {
                     products.sort(
@@ -345,36 +299,35 @@ const SearchPage = () => {
                   const isMobile = window.innerWidth < 768;
                   const page = currentPages[shop.name] || 1;
                   const perPage = isMobile ? 6 : 8;
-                  const totalPages = Math.ceil(products.length / perPage); /* */
+                  const totalPages = Math.ceil(products.length / perPage);
                   const paginatedProducts = products.slice(
                     (page - 1) * perPage,
                     page * perPage
-                  ); /* */
+                  );
 
-                  if (!products.length) return null; /* */
+                  if (!products.length) return null;
 
                   return (
                     <div key={idx} className="mb-12">
                       {/* Shop Logo */}
-                      <div className="flex items-center justify-between space-x-3  mb-4">
+                      <div className="flex md:items-center justify-between  mb-4 md:flex-row flex-col">
                         {shop.logo && (
                           <>
                             <img
                               src={shop.logo}
                               alt={shop.name}
-                              className="h-10 w-14 object-contain" /* */
+                              className="h-10 w-14 object-contain"
                             />
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-4 justify-between">
                               {" "}
                               {/* Existing div */}
                               {paginatedProducts?.length ? (
-                                <p className="font-medium text-gray-500">
+                                <p className="md:text-md text-xs text-gray-500">
                                   Showing {paginatedProducts?.length} of{" "}
                                   {shop?.products?.length}{" "}
                                   {paginatedProducts?.length > 1
                                     ? "products"
                                     : "product"}{" "}
-                                  {/* */}
                                 </p>
                               ) : null}
                               {/* Updated Sort Dropdown */}

@@ -47,7 +47,7 @@ export default function Card({ product }) {
         </div>
 
         <h6 className="text-xs text-left pt-2 line-clamp-2">{product?.name}</h6>
-        <p className="text-lg font-semibold text-blue-600 text-left mt-2">
+        <p className="md:text-lg text-md font-semibold text-blue-600 text-left mt-2">
           {price === "Out Of Stock" || price === 0
             ? "Out Of Stock"
             : `${price.toLocaleString("en-BD")}৳`}

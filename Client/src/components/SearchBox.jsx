@@ -33,22 +33,10 @@ const SearchBar = () => {
   const handleSearch = async (searchInput) => {
     setIsLoading(true);
     try {
-      //  const response = await fetch(
-      //   `<span class="math-inline">\{import\.meta\.env\.VITE\_API\_BASE\_URL\}/scrape/</span>{searchInput}`
-      // );
-      // if (!response.ok) {
-      //   throw new Error("Fetch failed");
-      // }
-      // const data = await response.json();
-      // setShops(data);
-
-      // localStorage.setItem(searchInput, JSON.stringify(data));
-
       updateRecentSearches(searchInput);
-      navigate(`/search?query=${encodeURIComponent(searchInput.trim())}`); // Navigate on search
+      navigate(`/search?query=${encodeURIComponent(searchInput.trim())}`);
     } catch (err) {
       console.error("Fetch error:", err);
-      //  setError("Unable to connect to server. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -58,7 +46,6 @@ const SearchBar = () => {
     e.preventDefault();
     if (!inputValue.trim()) return;
     handleSearch(inputValue);
-    // navigate(`/search?query=${encodeURIComponent(inputValue.trim())}`);
   };
 
   const updateRecentSearches = (searchInput) => {
@@ -92,9 +79,9 @@ const SearchBar = () => {
         Search
       </label>
       <div className="relative">
-        <div className="absolute inset-y-0 left-3 flex items-center ps-3 pointer-events-none">
+        <div className="absolute inset-y-0 left-3 flex items-center md:ps-3 ps-1 pointer-events-none">
           <svg
-            className="w-4 h-4 text-gray-500 dark:text-gray-400"
+            className="md:w-4 md:h-4 w-3 h-3 text-gray-500 dark:text-gray-400"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -112,7 +99,7 @@ const SearchBar = () => {
         <input
           type="search"
           id="default-search"
-          className="block w-full p-6 ps-12 text-sm text-gray-900 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+          className="block w-full md:p-6 p-4 md:ps-12 ps-9 md:text-sm text-xs text-gray-900 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           placeholder="Khoj the search..."
           required
           value={inputValue}
@@ -122,7 +109,7 @@ const SearchBar = () => {
         />
         <button
           type="submit"
-          className="text-white absolute right-2 bottom-[.6rem] bg-blue-600 hover:bg-blue-800 font-medium rounded-sm text-xl px-8 py-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="text-white absolute right-2 md:bottom-[.6rem] bottom-[.4rem] bg-blue-600 hover:bg-blue-800 font-medium rounded-sm md:text-xl text-sm md:px-8 px-4 md:py-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           {isLoading ? <Loader /> : "Search"}
         </button>
@@ -137,7 +124,7 @@ const SearchBar = () => {
                 <li
                   key={index}
                   onClick={() => setInputValue(search)}
-                  className="cursor-pointer px-4 py-2 text-sm hover:bg-blue-100"
+                  className="cursor-pointer px-4 py-2 md:text-sm text-xs hover:bg-blue-100"
                 >
                   {search}
                 </li>
@@ -145,7 +132,7 @@ const SearchBar = () => {
             </ul>
             <button
               onClick={() => localStorage.clear()}
-              className="absolute z-10 top-1 right-4 text-blue-600 hover:underline"
+              className="absolute z-10 top-1 right-4 text-blue-600 hover:underline md:text-sm text-xs"
             >
               Clear all
             </button>

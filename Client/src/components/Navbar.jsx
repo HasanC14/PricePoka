@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCompare } from "../context/CompareContext";
 import { useState, useEffect } from "react";
+import { LuGitCompareArrows } from "react-icons/lu";
 
 const Navbar = () => {
   const { compareList } = useCompare();
@@ -86,7 +87,7 @@ const Navbar = () => {
         </Link>
         <Link
           to="/compare"
-          className={`inline-flex items-center border border-blue-600 text-blue-600 py-2 px-4 rounded-sm font-medium text-sm hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 ${
+          className={`inline-flex items-center border border-blue-600 text-blue-600 py-2 px-4 rounded-sm font-medium md:text-md text-sm hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 ${
             scale
               ? "transform scale-105 transition-all duration-300 ease-in-out"
               : ""
@@ -94,8 +95,7 @@ const Navbar = () => {
         >
           <span className="mr-2">
             <svg
-              width="24"
-              height="24"
+              className="h-[18px] w-[18px] md:h-[24px] md:w-[24px]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
