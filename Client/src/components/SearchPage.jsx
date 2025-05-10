@@ -4,7 +4,7 @@ import SkeletonCard from "./SkeletonCard";
 import Card from "./Card";
 import { Range } from "react-range";
 import SearchBar from "./SearchBox";
-
+import skyland from "../assets/skyland.jpg";
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -313,10 +313,23 @@ const SearchPage = () => {
                       <div className="flex md:items-center justify-between  mb-4 md:flex-row flex-col">
                         {shop.logo && (
                           <>
-                            <img
+                            {/* <img
                               src={shop.logo}
                               alt={shop.name}
-                              className="h-10 w-14 object-contain"
+                              className=" object-contain"
+                            /> */}
+                            <img
+                              src={
+                                shop.name.includes("SkyLand")
+                                  ? skyland
+                                  : shop.logo
+                              }
+                              alt={shop.name}
+                              className={`  h-10 w-14 object-contain ${
+                                shop.name.includes("TechLand")
+                                  ? "bg-black px-1"
+                                  : ""
+                              }`}
                             />
                             <div className="flex items-center space-x-4 justify-between">
                               {" "}

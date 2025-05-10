@@ -1,8 +1,6 @@
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-import { MdDelete } from "react-icons/md";
-import { Link } from "react-router-dom";
-import ad from "../assets/3.webp";
+
 import Binary from "../assets/binary.png";
 import PCHouse from "../assets/pchousew.webp";
 import potaka from "../assets/potaka.webp";
@@ -14,7 +12,7 @@ import Ultra from "../assets/ultra.webp";
 import Vibegaming from "../assets/vibegaming.png";
 import { useCompare } from "../context/CompareContext";
 import placeholder from "../assets/place.jpg";
-import Breadcrumb from "./Breadcrumb";
+import Ad from "./Ad";
 export default function ComparePage() {
   const { compareList, removeFromCompare, removeAllFromCompare } = useCompare();
   const navigate = useNavigate();
@@ -79,14 +77,8 @@ export default function ComparePage() {
         Back to Search
       </button>
       {/* Title */}
-      <h1 className="md:text-4xl text-2xl  ">Compare</h1>
-      <a href="https://ezplay.tech/" target="_blank" className="w-full my-4">
-        <img
-          src={ad}
-          alt="Advertisement"
-          className="rounded-md w-full object-contain "
-        />
-      </a>
+      <h1 className="md:text-4xl text-2xl  mb-4">Compare</h1>
+      {/* <Ad /> */}
       {/* <button
         onClick={() => removeAllFromCompare()}
         className="fixed flex items-center gap-2 bottom-4 right-48 lg:right-64  text-white lg:text-xl md:text-md text-sm z-10 transition-all ease-in-out duration-700 cursor-pointer gradient-btn text p-4 rounded-lg"
@@ -128,7 +120,9 @@ export default function ComparePage() {
                       <img
                         src={Logo}
                         alt={merchant}
-                        className="h-8 w-16 object-contain"
+                        className={`  h-8 w-16 object-contain ${
+                          merchant.includes("techlandbd") ? "bg-black px-1" : ""
+                        }`}
                       />
                     ) : (
                       <span className="text-sm text-gray-500">Unknown</span>
@@ -240,7 +234,9 @@ export default function ComparePage() {
                   <img
                     src={Logo}
                     alt={merchant}
-                    className="h-6 w-auto object-contain"
+                    className={`  h-6 w-12 object-contain ${
+                      merchant.includes("techlandbd") ? "bg-black px-1" : ""
+                    }`}
                   />
                 )}
               </div>
