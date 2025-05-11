@@ -33,7 +33,7 @@ So, I first created a script using **Puppeteer** to scrape prices. Then I though
 
 ## 🌐 Live Website
 
-👉 [https://pricepoka.vercel.app](https://pricepoka.vercel.app)
+👉 [https://www.pricepoka.com/](https://www.pricepoka.com/)
 
 ---
 
@@ -57,8 +57,6 @@ So, I first created a script using **Puppeteer** to scrape prices. Then I though
 ## 🙌 Contributing
 
 Found a bug or want to suggest a feature? Feel free to open an issue or submit a pull request!
-
-This project uses a backend hosted at [https://price-poka-servre.vercel.app](https://price-poka-servre.vercel.app).
 
 - To use the default hosted backend, simply copy `.env.example` to `.env`, and you're good to go.
 - If you're running your own backend, replace the URL inside `.env` with your own.
