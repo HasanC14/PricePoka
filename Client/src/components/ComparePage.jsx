@@ -13,6 +13,7 @@ import Vibegaming from "../assets/vibegaming.png";
 import { useCompare } from "../context/CompareContext";
 import placeholder from "../assets/place.jpg";
 import Ad from "./Ad";
+import { StaggerChildren } from "./StaggerChildren";
 export default function ComparePage() {
   const { compareList, removeFromCompare, removeAllFromCompare } = useCompare();
   const navigate = useNavigate();
@@ -68,7 +69,11 @@ export default function ComparePage() {
   const referenceProduct = compareList[0];
 
   return (
-    <div className="p-6 flex flex-col max-w-7xl w-full mx-auto">
+    <StaggerChildren
+      direction="up"
+      staggerDelay={0.15}
+      className="p-6 flex flex-col max-w-7xl w-full mx-auto"
+    >
       <button
         onClick={() => navigate(-1)}
         className="md:text-sm text-xs flex mb-4 gap-2 items-center text-blue-600 font-bold hover:underline"
@@ -78,7 +83,7 @@ export default function ComparePage() {
       </button>
       {/* Title */}
       <h1 className="md:text-4xl text-2xl  mb-4">Compare</h1>
-      {/* <Ad /> */}
+      <Ad />
       {/* <button
         onClick={() => removeAllFromCompare()}
         className="fixed flex items-center gap-2 bottom-4 right-48 lg:right-64  text-white lg:text-xl md:text-md text-sm z-10 transition-all ease-in-out duration-700 cursor-pointer gradient-btn text p-4 rounded-lg"
@@ -87,7 +92,7 @@ export default function ComparePage() {
       </button> */}
 
       {/* Right - Merchant Table */}
-      <div className="bg-white shadow-lg rounded-md overflow-hidden overflow-x-auto md:block hidden">
+      <div className="bg-white shadow-lg rounded-md overflow-hidden overflow-x-auto md:block hidden table">
         <table className="min-w-full divide-y divide-gray-200 table-auto">
           <thead className="bg-gray-50">
             <tr>
@@ -262,6 +267,6 @@ export default function ComparePage() {
           );
         })}
       </div>
-    </div>
+    </StaggerChildren>
   );
 }

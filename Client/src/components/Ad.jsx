@@ -1,6 +1,6 @@
 import React from "react";
 import ad from "../assets/3.webp";
-import m_ad from "../assets/mobile2.webp";
+import m_ad from "../assets/m.webp";
 const Ad = () => {
   return (
     <div className="max-w-7xl mx-auto my-4">

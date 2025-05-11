@@ -5,6 +5,7 @@ import Card from "./Card";
 import { Range } from "react-range";
 import SearchBar from "./SearchBox";
 import skyland from "../assets/skyland.jpg";
+import { StaggerChildren } from "./StaggerChildren";
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -371,11 +372,15 @@ const SearchPage = () => {
                       </div>
 
                       {/* Products */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                      <StaggerChildren
+                        direction="up"
+                        staggerDelay={0.15}
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6"
+                      >
                         {paginatedProducts.map((product, i) => (
                           <Card key={i} product={product} />
                         ))}
-                      </div>
+                      </StaggerChildren>
 
                       {/* Pagination */}
                       {totalPages > 1 && (

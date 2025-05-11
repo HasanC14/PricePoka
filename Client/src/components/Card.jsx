@@ -1,6 +1,7 @@
 // components/Card.js
 import { useCompare } from "../context/CompareContext";
 import placeholder from "../assets/place.jpg";
+import { AnimatedCard } from "./AnimatedCard";
 
 export default function Card({ product }) {
   const { addToCompare, compareList } = useCompare();
@@ -22,7 +23,7 @@ export default function Card({ product }) {
   const price = extractNumbersFromString(product?.price);
 
   return (
-    <div className="rounded-md overflow-hidden shadow-md text-prime p-4 space-y-2 text-black bg-gray-100 relative min-h-72">
+    <AnimatedCard className="rounded-md overflow-hidden shadow-md text-prime p-4 space-y-2 text-black bg-gray-100 relative min-h-72">
       <a
         href={product.link}
         target="_blank"
@@ -62,6 +63,6 @@ export default function Card({ product }) {
       >
         {alreadyAdded ? "Added to compare" : "Add to compare"}
       </button>
-    </div>
+    </AnimatedCard>
   );
 }

@@ -1,9 +1,14 @@
 import Ad from "./Ad";
 import SearchBar from "./SearchBox";
+import { StaggerChildren } from "./StaggerChildren";
 
 function HomePage() {
   return (
-    <div className="flex flex-col  justify-center w-full mx-auto  md:p-0 p-4">
+    <StaggerChildren
+      direction="up"
+      staggerDelay={0.15}
+      className="flex flex-col  justify-center w-full mx-auto  md:p-0 p-4"
+    >
       {/* Header Section */}
       <header className="text-center md:mb-8 mb-4">
         <h1 className="md:text-4xl text-2xl font-semibold text-black">
@@ -19,8 +24,8 @@ function HomePage() {
       <main className="">
         <SearchBar />
       </main>
-      {/* <Ad /> */}
-    </div>
+      <Ad />
+    </StaggerChildren>
   );
 }
 

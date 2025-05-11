@@ -1,7 +1,7 @@
 {
-  "name": "client",
+  "name": "PricePoka",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,7 @@
     "@lottiefiles/dotlottie-react": "^0.13.2",
     "axios": "^1.7.2",
     "countapi-js": "^1.0.2",
-    "framer-motion": "^11.2.10",
+    "framer-motion": "^11.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
