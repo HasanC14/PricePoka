@@ -92,7 +92,7 @@ export default function ComparePage() {
       </button> */}
 
       {/* Right - Merchant Table */}
-      <div className="bg-white shadow-lg rounded-md overflow-hidden overflow-x-auto md:block hidden table">
+      <div className="bg-white shadow-lg rounded-md overflow-hidden overflow-x-auto md:block hidden">
         <table className="min-w-full divide-y divide-gray-200 table-auto">
           <thead className="bg-gray-50">
             <tr>
