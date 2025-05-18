@@ -69,6 +69,7 @@ const SearchBar = () => {
 
   return (
     <form
+      autoComplete="off"
       className="col-span-12 max-w-7xl mx-auto w-full"
       onSubmit={handleSubmit}
     >
