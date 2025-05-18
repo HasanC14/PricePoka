@@ -397,8 +397,8 @@ const SearchPage = () => {
                               }
                               className={`px-3 py-1 border text-gray-500  dark:border-[#1e293b] rounded-full ${
                                 page === i + 1
-                                  ? "bg-blue-600  text-gray-100"
-                                  : "hover:bg-blue-200"
+                                  ? "bg-blue-600  text-white"
+                                  : "hover:bg-blue-600 hover:text-white"
                               }`}
                             >
                               {i + 1}

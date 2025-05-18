@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCompare } from "../context/CompareContext";
 import { useState, useEffect } from "react";
-import { LuMoonStar, LuSun } from "react-icons/lu";
+import { LuMoonStar, LuSun, LuGitCompare } from "react-icons/lu";
 
 function useDarkMode() {
   useEffect(() => {
@@ -207,14 +207,13 @@ const Navbar = () => {
 
           <Link
             to="/compare"
-            className={`inline-flex items-center border border-blue-600 text-blue-600 py-2 px-4 rounded-sm font-medium md:text-md text-sm hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 ${
-              scale
-                ? "transform scale-105 transition-all duration-300 ease-in-out"
-                : ""
+            className={`inline-flex items-center border border-blue-600 text-blue-600 py-2 px-4 rounded-sm font-medium md:text-md text-sm transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white  ${
+              scale ? "transform scale-105 " : ""
             }`}
           >
             <span className="mr-2">
-              <svg
+              <LuGitCompare className="text-xl" />
+              {/* <svg
                 className="h-[18px] w-[18px] md:h-[24px] md:w-[24px]"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -232,7 +231,7 @@ const Navbar = () => {
                   d="M13.9053 2.78033C14.1982 2.48744 14.1982 2.01256 13.9053 1.71967C13.6124 1.42678 13.1376 1.42678 12.8447 1.71967L10.3447 4.21967C10.0518 4.51256 10.0518 4.98744 10.3447 5.28033L12.8447 7.78033C13.1376 8.07322 13.6124 8.07322 13.9053 7.78033C14.1982 7.48744 14.1982 7.01256 13.9053 6.71967L12.6857 5.5H16.75C17.9926 5.5 19 6.50736 19 7.75V16.087C17.5667 16.4255 16.5 17.7132 16.5 19.25C16.5 21.0449 17.9551 22.5 19.75 22.5C21.5449 22.5 23 21.0449 23 19.25C23 17.7132 21.9333 16.4255 20.5 16.087V7.75C20.5 5.67893 18.8211 4 16.75 4H12.6857L13.9053 2.78033ZM18 19.25C18 18.2835 18.7835 17.5 19.75 17.5C20.7165 17.5 21.5 18.2835 21.5 19.25C21.5 20.2165 20.7165 21 19.75 21C18.7835 21 18 20.2165 18 19.25Z"
                   fill="#2563EB"
                 />
-              </svg>
+              </svg> */}
             </span>
             Compare {compareList.length > 0 && `(${compareList.length})`}
           </Link>
