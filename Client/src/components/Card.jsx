@@ -23,7 +23,7 @@ export default function Card({ product }) {
   const price = extractNumbersFromString(product?.price);
 
   return (
-    <AnimatedCard className="rounded-md overflow-hidden shadow-md text-prime p-4 space-y-2 text-black bg-gray-100 relative min-h-72">
+    <AnimatedCard className="rounded-md overflow-hidden shadow-md text-prime p-4 space-y-2 text-black dark:text-gray-100 bg-gray-100 relative min-h-72 dark:bg-[#020817] dark:border dark:border-[#1e293b]">
       <a
         href={product.link}
         target="_blank"
@@ -56,8 +56,10 @@ export default function Card({ product }) {
       </a>
       <button
         onClick={() => addToCompare(product)}
-        className={`absolute bottom-4 left-4 right-4 w-auto rounded-sm py-2  text-xs md:text-base text-white hover:bg-blue-800 ${
-          alreadyAdded ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600"
+        className={`absolute bottom-4 left-4 right-4 w-auto rounded-sm py-2  text-xs md:text-base text-white dark:text-gray-100 hover:bg-blue-800 hover:text-white ${
+          alreadyAdded
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 dark:bg-[#020817] dark:border border-[#1e293b] dark:hover:bg-blue-800"
         }`}
         disabled={alreadyAdded}
       >

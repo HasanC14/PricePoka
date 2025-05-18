@@ -99,7 +99,7 @@ const SearchBar = () => {
         <input
           type="search"
           id="default-search"
-          className="block w-full md:p-6 p-4 md:ps-12 ps-9 md:text-sm text-xs text-gray-900 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+          className="block w-full md:p-6 p-4 md:ps-12 ps-9 md:text-sm text-xs text-gray-900 dark:text-gray-100 border border-gray-300 rounded-md focus:ring-blue-500 dark:bg-[#020817] dark:border dark:border-[#1e293b]"
           placeholder="Khoj the search..."
           required
           value={inputValue}
@@ -117,14 +117,14 @@ const SearchBar = () => {
         {dropdownVisible && recentSearches.length > 0 && (
           <div
             ref={dropdownRef}
-            className="absolute z-10 bg-white shadow-md w-full mt-1 rounded-md max-h-60 overflow-y-auto"
+            className="absolute z-10 bg-white dark:bg-[#020817] dark:border dark:border-[#1e293b] text-gray-500 shadow-md w-full mt-1 rounded-md max-h-60 overflow-y-auto"
           >
             <ul className="py-4">
               {recentSearches.map((search, index) => (
                 <li
                   key={index}
                   onClick={() => setInputValue(search)}
-                  className="cursor-pointer px-4 py-2 md:text-sm text-xs hover:bg-blue-100"
+                  className="cursor-pointer px-4 py-2 md:text-sm text-xs hover:bg-blue-100 dark:hover:bg-gray-900"
                 >
                   {search}
                 </li>

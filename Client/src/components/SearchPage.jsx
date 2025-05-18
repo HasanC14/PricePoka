@@ -130,7 +130,7 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="px-4 py-8 grid grid-cols-12 gap-6 max-w-7xl w-full mx-auto ">
+    <div className="px-4 py-8 grid grid-cols-12 gap-6 max-w-7xl w-full mx-auto dark:text-gray-100">
       {/* Search bar */}
       <SearchBar />
 
@@ -138,7 +138,7 @@ const SearchPage = () => {
       <div className="grid grid-cols-12 col-span-12 gap-6 w-full">
         {/* Sidebar */}
         <div
-          className={`col-span-12 md:col-span-3 fixed -top-2 right-0 bg-white p-6 transition-transform duration-300 ease-in-out md:relative open ${
+          className={`col-span-12 md:col-span-3 fixed -top-2 right-0  dark:bg-[#020817] p-6 transition-transform duration-300 ease-in-out md:relative open ${
             showFilters
               ? "transform translate-x-0 "
               : "transform translate-x-full "
@@ -182,13 +182,13 @@ const SearchPage = () => {
                   type="number"
                   value={minPrice}
                   onChange={(e) => handleInputChange(e, 0)} // Update min price on change
-                  className="border p-2 md:w-20 w-16 rounded"
+                  className="border p-2 md:w-20 w-16 rounded dark:bg-[#020817] dark:border dark:border-[#1e293b]"
                 />
                 <input
                   type="number"
                   value={maxPrice}
                   onChange={(e) => handleInputChange(e, 1)} // Update max price on change
-                  className="border p-2 md:w-20 w-16 rounded"
+                  className="border p-2 md:w-20 w-16 rounded dark:bg-[#020817] dark:border dark:border-[#1e293b]"
                 />
               </div>
 
@@ -239,10 +239,11 @@ const SearchPage = () => {
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
+                  className=""
                   checked={showInStockOnly}
                   onChange={() => setShowInStockOnly(!showInStockOnly)}
                 />
-                <label>In Stock Only</label>
+                <label className="">In Stock Only</label>
               </div>
             </div>
           </div>
@@ -355,7 +356,7 @@ const SearchPage = () => {
                                       [shop.name]: newSortOrder, // Set sort order for the specific shop
                                     }));
                                   }}
-                                  className="p-2 border border-gray-300 rounded-md text-sm"
+                                  className="p-2 border border-gray-300 rounded-md text-sm dark:bg-[#020817] dark:border-[#1e293b]"
                                 >
                                   <option value="default">Sort by</option>
                                   <option value="price-asc">
@@ -394,9 +395,9 @@ const SearchPage = () => {
                                   [shop.name]: i + 1,
                                 }))
                               }
-                              className={`px-3 py-1 border rounded-full ${
+                              className={`px-3 py-1 border text-gray-500  dark:border-[#1e293b] rounded-full ${
                                 page === i + 1
-                                  ? "bg-blue-600 text-white"
+                                  ? "bg-blue-600  text-gray-100"
                                   : "hover:bg-blue-200"
                               }`}
                             >

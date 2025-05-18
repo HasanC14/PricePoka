@@ -53,7 +53,7 @@ export default function ComparePage() {
 
   if (compareList?.length === 0) {
     return (
-      <div className="p-8 text-center text-lg text-gray-600 flex flex-col justify-center items-center max-w-7xl w-full mx-auto">
+      <div className="p-8 text-center text-lg text-gray-500 flex flex-col justify-center items-center max-w-7xl w-full mx-auto">
         No products in compare list.{" "}
         <button
           onClick={() => navigate(-1)}
@@ -82,7 +82,9 @@ export default function ComparePage() {
         Back to Search
       </button>
       {/* Title */}
-      <h1 className="md:text-4xl text-2xl  mb-4">Compare</h1>
+      <h1 className="md:text-4xl text-2xl text-black dark:text-gray-100  mb-4">
+        Compare
+      </h1>
       <Ad />
       {/* <button
         onClick={() => removeAllFromCompare()}
@@ -92,26 +94,26 @@ export default function ComparePage() {
       </button> */}
 
       {/* Right - Merchant Table */}
-      <div className="bg-white shadow-lg rounded-md overflow-hidden overflow-x-auto md:block hidden">
-        <table className="min-w-full divide-y divide-gray-200 table-auto">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+      <div className="bg-white shadow-lg overflow-hidden overflow-x-auto md:block hidden">
+        <table className="min-w-full dark:border-b dark:border-[#1e293b] divide-y divide-gray-200 dark:divide-[#1e293b] table-auto">
+          <thead className="bg-gray-50 dark:bg-gray-900">
+            <tr className="text-gray-700 dark:text-gray-100">
+              <th className="px-6 py-3 text-left text-sm font-semibold">
                 Shop
               </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              <th className="px-6 py-3 text-left text-sm font-semibold">
                 Product
               </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              <th className="px-6 py-3 text-left text-sm font-semibold">
                 Availability
               </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+              <th className="px-6 py-3 text-left text-sm font-semibold">
                 Price
               </th>
               <th className="px-6 py-3"></th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-[#020817] dark:bg-[#020817] dark:border dark:border-[#1e293b]  divide-y divide-gray-200 dark:divide-[#1e293b]">
             {sortedCompareList.map((product) => {
               const merchant = getMerchantName(product.link);
               const Logo = merchant ? logoMap[merchant] : null;
@@ -146,7 +148,7 @@ export default function ComparePage() {
                         alt={product.name}
                         className="h-10 w-10 object-contain"
                       />
-                      <span className="text-gray-900 text-sm">
+                      <span className="text-gray-900 dark:text-gray-100 text-sm">
                         {product.name}
                       </span>
                     </div>
@@ -160,7 +162,7 @@ export default function ComparePage() {
                   </td>
 
                   {/* Price */}
-                  <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900 dark:text-gray-100">
                     {basePrice
                       ? `${basePrice.toLocaleString("en-BD")} BDT`
                       : "N/A"}
@@ -200,7 +202,7 @@ export default function ComparePage() {
           return (
             <div
               key={product.id}
-              className="bg-gray-100 rounded-md shadow-md p-4 space-y-3"
+              className="bg-gray-100 dark:bg-[#020817] dark:border dark:border-[#1e293b] rounded-md shadow-md p-4 space-y-3"
             >
               {/* 1) small thumb + name */}
               <div className="flex items-center gap-3">
@@ -213,7 +215,7 @@ export default function ComparePage() {
                   alt={product.name}
                   className="h-8 w-8 object-contain rounded"
                 />
-                <h6 className="text-sm font-medium text-gray-900">
+                <h6 className="text-sm font-medium text-gray-900 dark:text-gray-100">
                   {product.name}
                 </h6>
               </div>
@@ -252,13 +254,13 @@ export default function ComparePage() {
                   href={product.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 text-center px-3 py-2 bg-blue-600 text-white rounded-sm text-xs hover:bg-blue-800"
+                  className="flex-1 text-center px-3 py-2 bg-blue-600 text-white rounded-sm text-xs hover:bg-blue-800 dark:bg-[#020817] dark:border dark:border-[#1e293b] dark:hover:bg-blue-800 "
                 >
                   Buy
                 </a>
                 <button
                   onClick={() => removeFromCompare(product.id)}
-                  className="flex-1 text-center px-3 py-2 border border-red-500 text-red-500 rounded-sm text-xs hover:bg-red-50"
+                  className="flex-1 text-center px-3 py-2 text-red-500 border border-red-500 dark:border-[#1e293b]  rounded-sm text-xs hover:bg-red-50"
                 >
                   Remove
                 </button>

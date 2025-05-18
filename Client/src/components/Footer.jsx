@@ -1,7 +1,7 @@
-import { FaSquareGithub, FaSquareFacebook, FaLinkedin } from "react-icons/fa6";
+import { LuGithub, LuFacebook, LuLinkedin } from "react-icons/lu";
 export default function Footer() {
   return (
-    <footer class="bg-gray-100 rounded-lg shadow-sm text-black">
+    <footer class="bg-gray-100 rounded-lg shadow-sm text-black dark:bg-[#020817] dark:border-t dark:border-[#1e293b]">
       <div class="w-full max-w-7xl mx-auto p-4 md:py-8">
         <div class="flex items-center md:flex-row flex-col sm:justify-between">
           <ul class="flex flex-wrap items-center  mb-6 text-xl font-medium text-gray-500 sm:mb-0 ">
@@ -24,7 +24,7 @@ export default function Footer() {
                 href="https://github.com/HasanC14/PricePoka"
                 class="hover:text-blue-600 me-2 flex items-center"
               >
-                <FaSquareGithub />
+                <LuGithub />
               </a>
             </li>
             <li>
@@ -32,7 +32,7 @@ export default function Footer() {
                 href="https://www.facebook.com/dev.hasanchowdhury"
                 class="hover:text-blue-600 me-2 flex items-center"
               >
-                <FaSquareFacebook />
+                <LuFacebook />
               </a>
             </li>
             <li>
@@ -40,7 +40,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/in/dev1hasanchowdhury/"
                 class="hover:text-blue-600 flex items-center"
               >
-                <FaLinkedin />
+                <LuLinkedin />
               </a>
             </li>
           </ul>
