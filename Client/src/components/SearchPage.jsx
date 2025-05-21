@@ -146,11 +146,11 @@ const SearchPage = () => {
         >
           <div className="md:sticky top-24 space-y-6">
             {/* Filters go here... */}
-            <div>
+            <div className="">
               <h4 className="font-semibold mb-2">Company</h4>
-              <div className="space-y-2 max-h-48 overflow-y-auto">
+              <ul className="space-y-2 ">
                 {shops.map((shop, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
+                  <li key={idx} className="flex items-center gap-2">
                     <div className="custom-checkbox">
                       <input
                         type="checkbox"
@@ -169,9 +169,9 @@ const SearchPage = () => {
                     >
                       {shop.name}
                     </label>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
             {/* Price Range Filter */}
@@ -315,11 +315,6 @@ const SearchPage = () => {
                       <div className="flex md:items-center justify-between  mb-4 md:flex-row flex-col">
                         {shop.logo && (
                           <>
-                            {/* <img
-                              src={shop.logo}
-                              alt={shop.name}
-                              className=" object-contain"
-                            /> */}
                             <img
                               src={
                                 shop.name.includes("SkyLand")
