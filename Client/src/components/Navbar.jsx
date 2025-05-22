@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCompare } from "../context/CompareContext";
 import { useState, useEffect } from "react";
-import { LuMoonStar, LuSun, LuGitCompare } from "react-icons/lu";
+import { LuMoonStar, LuSun, LuGitCompare, LuGamepad } from "react-icons/lu";
 
 function useDarkMode() {
   useEffect(() => {
@@ -214,7 +214,17 @@ const Navbar = () => {
             <span className="mr-2">
               <LuGitCompare className="text-xl" />
             </span>
-            Compare {compareList.length > 0 && `(${compareList.length})`}
+            <span className="hidden md:block">Compare</span>
+            {compareList.length > 0 && `(${compareList.length})`}
+          </Link>
+          <Link
+            to="/gaming-pc"
+            className="inline-flex items-center border border-blue-600 text-blue-600 py-2 px-4 rounded-sm font-medium md:text-md text-sm transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white"
+          >
+            <span className="mr-2">
+              <LuGamepad className="text-xl" />
+            </span>
+            <span className="hidden md:block">Gaming PCs</span>
           </Link>
         </div>
       </div>

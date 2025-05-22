@@ -1,155 +1,122 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import SearchBar from "./SearchBox2";
 import SkeletonCard from "./SkeletonCard";
 import Card from "./Card";
 import { Range } from "react-range";
-import SearchBar from "./SearchBox";
-import skyland from "../assets/skyland.jpg";
-import binary from "../assets/binary.png";
 import { StaggerChildren } from "./StaggerChildren";
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
-const SearchPage = () => {
-  const query = useQuery().get("query") || "";
+const GamingPc = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [shops, setShops] = useState([]);
   const [error, setError] = useState(null);
-  // Manage filter visibility
+
+  // Manage filter visibility (for mobile)
   const [showFilters, setShowFilters] = useState(false);
 
-  const [sortOrders, setSortOrders] = useState({});
   // Filters
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedShops, setSelectedShops] = useState([]);
   const [showInStockOnly, setShowInStockOnly] = useState(false);
-  // Min and Max values
-  const [values, setValues] = useState([0, 389000]);
-  const [minPrice, maxPrice] = values;
+  const [priceRange, setPriceRange] = useState([0, 400000]); // adjust max as needed
 
-  // Pagination state
+  // New CPU build filters
+  const [filterAMD, setFilterAMD] = useState(false);
+  const [filterIntel, setFilterIntel] = useState(false);
+
+  // Sorting and Pagination
+  const [sortOrders, setSortOrders] = useState({});
   const [currentPages, setCurrentPages] = useState({});
 
+  // Derived suggestions from all product names
+  const allProductNames = shops.flatMap((shop) =>
+    (shop.products || []).map((p) => p.name)
+  );
+
+  // Filtered suggestions (max 5)
+  const suggestions = searchTerm
+    ? allProductNames.filter((name) =>
+        name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
+
   useEffect(() => {
-    if (query) {
-      const cachedData = localStorage.getItem(query); // Check if search results are cached
-      if (cachedData) {
-        setShops(JSON.parse(cachedData)); // Use cached data
-        const cachedShops = JSON.parse(cachedData);
-        const shopNames = cachedShops.map((shop) => shop.name);
-        setSelectedShops(shopNames); // Set selected shops from cached data
-      } else {
-        handleSearch(query); // If no cached data, fetch from API
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_FOR_PC}/gaming-pc`);
+        if (!res.ok) throw new Error("Failed to fetch");
+        const data = await res.json();
+        if (data.success) {
+          const shopsData = Object.entries(data.data).map(([name, val]) => ({
+            name,
+            logo: val.logo,
+            products: val.products,
+          }));
+          setShops(shopsData);
+          setSelectedShops(shopsData.map((shop) => shop.name)); // select all by default
+        } else {
+          setError("Failed to load data");
+        }
+      } catch (e) {
+        setError(e.message || "Error fetching data");
+      } finally {
+        setIsLoading(false);
       }
-    }
-  }, [query]);
-
-  const handleSearch = async (searchInput) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/scrape/${searchInput}`
-      );
-      if (!response.ok) {
-        throw new Error("Fetch failed");
-      }
-      const data = await response.json();
-      setShops(data);
-
-      // Create an array of shop names and update the selectedShops state
-      const shopNames = data.map((shop) => shop.name);
-      setSelectedShops(shopNames);
-
-      // Store the fetched data in localStorage
-      localStorage.setItem(searchInput, JSON.stringify(data));
-
-      // Update recent searches in localStorage
-      updateRecentSearches(searchInput);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setError("Unable to connect to server. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updateRecentSearches = (searchInput) => {
-    // Get the current timestamp
-    const now = Date.now();
-
-    // Clear localStorage if more than 1 day has passed
-    const lastUpdated = localStorage.getItem("lastUpdated");
-    if (lastUpdated && now - lastUpdated > 24 * 60 * 60 * 1000) {
-      localStorage.clear();
-    }
-
-    // Get the current recent searches from localStorage (or initialize as an empty array)
-    const recentSearches =
-      JSON.parse(localStorage.getItem("recentSearches")) || [];
-
-    // Remove the search input if it already exists to avoid duplicates
-    const filteredSearches = recentSearches.filter(
-      (item) => item !== searchInput
-    );
-
-    // Add the new search at the start
-    filteredSearches.unshift(searchInput);
-
-    // Limit the array to the last 5 searches
-    const limitedSearches = filteredSearches.slice(0, 5);
-
-    // Store the updated list of recent searches in localStorage
-    localStorage.setItem("recentSearches", JSON.stringify(limitedSearches));
-
-    // Update the timestamp of the last time the search history was updated
-    localStorage.setItem("lastUpdated", now);
-  };
-
-  const toggleShop = (shopName) => {
-    if (selectedShops.includes(shopName)) {
-      setSelectedShops(selectedShops.filter((name) => name !== shopName));
-    } else {
-      setSelectedShops([...selectedShops, shopName]);
-    }
-  };
+    };
+    fetchData();
+  }, []);
 
   const extractPrice = (priceString) => {
     const match = String(priceString)?.match(/\d{1,3}(,\d{3})*(\.\d+)?/g);
     return match ? parseFloat(match[0].replace(/,/g, "")) : 0;
   };
 
-  const handleInputChange = (e, index) => {
-    let newValue = parseInt(e.target.value);
-    if (isNaN(newValue)) return;
-
-    if (index === 0) {
-      setValues([Math.min(newValue, maxPrice), maxPrice]);
+  const toggleShop = (shopName) => {
+    if (selectedShops.includes(shopName)) {
+      setSelectedShops(selectedShops.filter((s) => s !== shopName));
     } else {
-      setValues([minPrice, Math.max(newValue, minPrice)]);
+      setSelectedShops([...selectedShops, shopName]);
     }
+  };
+
+  const handleInputChange = (e, index) => {
+    let val = parseInt(e.target.value);
+    if (isNaN(val)) return;
+    if (index === 0)
+      setPriceRange([Math.min(val, priceRange[1]), priceRange[1]]);
+    else setPriceRange([priceRange[0], Math.max(val, priceRange[0])]);
+  };
+
+  // Helper to check if product matches CPU build filter
+  const matchesCpuFilter = (name) => {
+    const lowerName = name.toLowerCase();
+    if (!filterAMD && !filterIntel) return true; // no cpu filter active
+    if (filterAMD && lowerName.includes("amd")) return true;
+    if (filterIntel && lowerName.includes("intel")) return true;
+    return false;
   };
 
   return (
     <div className="px-4 py-8 grid grid-cols-12 gap-6 max-w-7xl w-full mx-auto dark:text-gray-100">
       {/* Search bar */}
-      <SearchBar />
+      <SearchBar onSearch={setSearchTerm} suggestions={suggestions} />
 
       {/* 2-column layout: Sidebar + Products */}
       <div className="grid grid-cols-12 col-span-12 gap-6 w-full">
         {/* Sidebar */}
         <div
-          className={`col-span-12 md:col-span-3 fixed -top-2 right-0  dark:bg-[#020817] p-6 transition-transform duration-300 ease-in-out md:relative open ${
+          className={`col-span-12 md:col-span-3 fixed -top-2 right-0 dark:bg-[#020817] p-6 transition-transform duration-300 ease-in-out md:relative open ${
             showFilters
               ? "transform translate-x-0 "
               : "transform translate-x-full "
           } md:translate-x-0 md:block`}
         >
           <div className="md:sticky top-24 space-y-6">
-            {/* Filters go here... */}
-            <div className="">
+            {/* Company filter */}
+            <div>
               <h4 className="font-semibold mb-2">Company</h4>
-              <ul className="space-y-2 ">
+              <ul className="space-y-2">
                 {shops.map((shop, idx) => (
                   <li key={idx} className="flex items-center gap-2">
                     <div className="custom-checkbox">
@@ -181,13 +148,13 @@ const SearchPage = () => {
               <div className="flex justify-between mb-4">
                 <input
                   type="number"
-                  value={minPrice}
+                  value={priceRange[0]}
                   onChange={(e) => handleInputChange(e, 0)} // Update min price on change
                   className="border p-2 md:w-20 w-16 rounded dark:bg-[#020817] dark:border dark:border-[#1e293b]"
                 />
                 <input
                   type="number"
-                  value={maxPrice}
+                  value={priceRange[1]}
                   onChange={(e) => handleInputChange(e, 1)} // Update max price on change
                   className="border p-2 md:w-20 w-16 rounded dark:bg-[#020817] dark:border dark:border-[#1e293b]"
                 />
@@ -197,19 +164,19 @@ const SearchPage = () => {
               <Range
                 step={1000}
                 min={0}
-                max={389000}
-                values={values}
-                onChange={(values) => setValues(values)}
+                max={400000}
+                values={priceRange}
+                onChange={setPriceRange}
                 renderTrack={({ props, children }) => {
                   const trackStyle = {
                     position: "relative",
                     width: "100%",
                     height: "3px",
                     background: `linear-gradient(to right, #3b82f6 ${(
-                      (values[0] / 389000) *
+                      (priceRange[0] / 400000) *
                       100
                     ).toFixed(2)}%, #e5e7eb ${(
-                      (values[1] / 389000) *
+                      (priceRange[1] / 400000) *
                       100
                     ).toFixed(2)}%)`,
                     borderRadius: "9999px",
@@ -240,11 +207,33 @@ const SearchPage = () => {
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  className=""
                   checked={showInStockOnly}
                   onChange={() => setShowInStockOnly(!showInStockOnly)}
                 />
-                <label className="">In Stock Only</label>
+                <label>In Stock Only</label>
+              </div>
+            </div>
+
+            {/* CPU Build Filter */}
+            <div>
+              <h4 className="font-semibold mb-2">CPU Build</h4>
+              <div className="flex flex-col gap-2">
+                <label className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={filterAMD}
+                    onChange={() => setFilterAMD(!filterAMD)}
+                  />
+                  <span>AMD Build</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={filterIntel}
+                    onChange={() => setFilterIntel(!filterIntel)}
+                  />
+                  <span>Intel Build</span>
+                </label>
               </div>
             </div>
           </div>
@@ -254,6 +243,7 @@ const SearchPage = () => {
         <button
           onClick={() => setShowFilters(!showFilters)}
           className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-md shadow-lg z-20"
+          aria-label="Toggle Filters"
         >
           Filter
         </button>
@@ -263,7 +253,7 @@ const SearchPage = () => {
           {error && <div className="text-red-500 mb-4">{error}</div>}
           {shops.length === 0 && !isLoading && (
             <div className="col-span-12 text-center text-gray-500">
-              No products found for this search.
+              No products found.
             </div>
           )}
           {isLoading ? (
@@ -276,84 +266,92 @@ const SearchPage = () => {
             <>
               {shops
                 .filter((shop) => selectedShops.includes(shop.name))
-                .map((shop, idx) => {
-                  let products = (shop.products || []).filter((product) => {
-                    const price = extractPrice(product.price);
-                    const inStock = !showInStockOnly || price > 0;
-                    const aboveMin = !minPrice || price >= parseFloat(minPrice);
-                    const belowMax = !maxPrice || price <= parseFloat(maxPrice);
-                    return inStock && aboveMin && belowMax;
-                  });
+                .map((shop) => {
+                  // Filter products by search term, availability, price, and CPU build
+                  let filteredProducts = (shop.products || []).filter(
+                    (product) => {
+                      const price = extractPrice(product.price);
+                      const nameLower = product.name.toLowerCase();
+                      const matchesSearch = product.name
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase());
+                      const inStock = !showInStockOnly || price > 0;
+                      const aboveMin = price >= priceRange[0];
+                      const belowMax = price <= priceRange[1];
+                      const matchesCpu =
+                        (!filterAMD && !filterIntel) ||
+                        (filterAMD && nameLower.includes("amd")) ||
+                        (filterIntel && nameLower.includes("intel"));
+                      return (
+                        matchesSearch &&
+                        inStock &&
+                        aboveMin &&
+                        belowMax &&
+                        matchesCpu
+                      );
+                    }
+                  );
 
-                  const currentShopSortOrder =
-                    sortOrders[shop.name] || "default";
-
-                  if (currentShopSortOrder === "price-asc") {
-                    products.sort(
+                  // Sorting
+                  const sortOrder = sortOrders[shop.name] || "default";
+                  if (sortOrder === "price-asc") {
+                    filteredProducts.sort(
                       (a, b) => extractPrice(a.price) - extractPrice(b.price)
                     );
-                  } else if (currentShopSortOrder === "price-desc") {
-                    products.sort(
+                  } else if (sortOrder === "price-desc") {
+                    filteredProducts.sort(
                       (a, b) => extractPrice(b.price) - extractPrice(a.price)
                     );
                   }
 
-                  // The rest of your existing code for pagination will use the sorted 'products'
+                  // Pagination
                   const isMobile = window.innerWidth < 768;
                   const page = currentPages[shop.name] || 1;
-                  const perPage = isMobile ? 6 : 8;
-                  const totalPages = Math.ceil(products.length / perPage);
-                  const paginatedProducts = products.slice(
+                  const perPage = isMobile ? 8 : 12;
+                  const totalPages = Math.ceil(
+                    filteredProducts.length / perPage
+                  );
+                  const paginatedProducts = filteredProducts.slice(
                     (page - 1) * perPage,
                     page * perPage
                   );
 
-                  if (!products.length) return null;
+                  if (!filteredProducts.length) return null;
 
                   return (
-                    <div key={idx} className="mb-12">
-                      {/* Shop Logo */}
-                      <div className="flex md:items-center justify-between  mb-4 md:flex-row flex-col">
+                    <div key={shop.name} className="mb-12">
+                      {/* Shop header with logo */}
+                      <div className="flex md:items-center justify-between mb-4 md:flex-row flex-col">
                         {shop.logo && (
                           <>
                             <img
-                              src={
-                                shop.name.includes("SkyLand")
-                                  ? skyland
-                                  : shop.name.includes("Binary")
-                                  ? binary
-                                  : shop.logo
-                              }
-                              alt={shop.name}
-                              className={`  h-10 w-14 object-contain ${
+                              src={shop.logo}
+                              alt={`${shop.name} logo`}
+                              className={`h-10 w-14 object-contain ${
                                 shop.name.includes("TechLand")
                                   ? "bg-black px-1"
                                   : ""
                               }`}
                             />
                             <div className="flex items-center space-x-4 justify-between">
-                              {" "}
-                              {/* Existing div */}
-                              {paginatedProducts?.length ? (
+                              {paginatedProducts.length ? (
                                 <p className="md:text-md text-xs text-gray-500">
-                                  Showing {paginatedProducts?.length} of{" "}
-                                  {shop?.products?.length}{" "}
-                                  {paginatedProducts?.length > 1
+                                  Showing {paginatedProducts.length} of{" "}
+                                  {filteredProducts.length}{" "}
+                                  {paginatedProducts.length > 1
                                     ? "products"
-                                    : "product"}{" "}
+                                    : "product"}
                                 </p>
                               ) : null}
-                              {/* Updated Sort Dropdown */}
-                              {products.length > 0 && (
+                              {filteredProducts.length > 0 && (
                                 <select
-                                  value={sortOrders[shop.name] || "default"} // Get sort order for the current shop
-                                  onChange={(e) => {
-                                    const newSortOrder = e.target.value;
-                                    setSortOrders((prevSortOrders) => ({
-                                      ...prevSortOrders,
-                                      [shop.name]: newSortOrder, // Set sort order for the specific shop
-                                    }));
-                                  }}
+                                  value={sortOrders[shop.name] || "default"}
+                                  onChange={(e) =>
+                                    setSortOrders((prev) => ({
+                                      ...prev,
+                                      [shop.name]: e.target.value,
+                                    }))
+                                  }
                                   className="p-2 border border-gray-300 rounded-md text-sm dark:bg-[#020817] dark:border-[#1e293b]"
                                 >
                                   <option value="default">Sort by</option>
@@ -370,7 +368,7 @@ const SearchPage = () => {
                         )}
                       </div>
 
-                      {/* Products */}
+                      {/* Products grid */}
                       <StaggerChildren
                         direction="up"
                         staggerDelay={0.15}
@@ -393,9 +391,9 @@ const SearchPage = () => {
                                   [shop.name]: i + 1,
                                 }))
                               }
-                              className={`px-3 py-1 border text-gray-500  dark:border-[#1e293b] rounded-full ${
+                              className={`px-3 py-1 border text-gray-500 dark:border-[#1e293b] rounded-full ${
                                 page === i + 1
-                                  ? "bg-blue-600  text-white"
+                                  ? "bg-blue-600 text-white"
                                   : "hover:bg-blue-600 hover:text-white"
                               }`}
                             >
@@ -415,4 +413,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default GamingPc;
