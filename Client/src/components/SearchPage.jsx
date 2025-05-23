@@ -7,6 +7,7 @@ import Card from "./Card";
 import SearchBar from "./SearchBox";
 import SkeletonCard from "./SkeletonCard";
 import { StaggerChildren } from "./StaggerChildren";
+import Checkbox from "./ui/CheckBox";
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -32,14 +33,14 @@ const SearchPage = () => {
 
   useEffect(() => {
     if (query) {
-      const cachedData = localStorage.getItem(query); // Check if search results are cached
+      const cachedData = localStorage.getItem(query);
       if (cachedData) {
-        setShops(JSON.parse(cachedData)); // Use cached data
+        setShops(JSON.parse(cachedData));
         const cachedShops = JSON.parse(cachedData);
         const shopNames = cachedShops.map((shop) => shop.name);
-        setSelectedShops(shopNames); // Set selected shops from cached data
+        setSelectedShops(shopNames);
       } else {
-        handleSearch(query); // If no cached data, fetch from API
+        handleSearch(query);
       }
     }
   }, [query]);
@@ -51,20 +52,17 @@ const SearchPage = () => {
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/scrape/${searchInput}`
       );
+
       if (!response.ok) {
         throw new Error("Fetch failed");
       }
+
       const data = await response.json();
       setShops(data);
-
-      // Create an array of shop names and update the selectedShops state
       const shopNames = data.map((shop) => shop.name);
       setSelectedShops(shopNames);
 
-      // Store the fetched data in localStorage
       localStorage.setItem(searchInput, JSON.stringify(data));
-
-      // Update recent searches in localStorage
       updateRecentSearches(searchInput);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -75,34 +73,24 @@ const SearchPage = () => {
   };
 
   const updateRecentSearches = (searchInput) => {
-    // Get the current timestamp
     const now = Date.now();
-
-    // Clear localStorage if more than 1 day has passed
     const lastUpdated = localStorage.getItem("lastUpdated");
+
     if (lastUpdated && now - lastUpdated > 24 * 60 * 60 * 1000) {
       localStorage.clear();
     }
 
-    // Get the current recent searches from localStorage (or initialize as an empty array)
     const recentSearches =
       JSON.parse(localStorage.getItem("recentSearches")) || [];
 
-    // Remove the search input if it already exists to avoid duplicates
     const filteredSearches = recentSearches.filter(
       (item) => item !== searchInput
     );
 
-    // Add the new search at the start
     filteredSearches.unshift(searchInput);
 
-    // Limit the array to the last 5 searches
     const limitedSearches = filteredSearches.slice(0, 5);
-
-    // Store the updated list of recent searches in localStorage
     localStorage.setItem("recentSearches", JSON.stringify(limitedSearches));
-
-    // Update the timestamp of the last time the search history was updated
     localStorage.setItem("lastUpdated", now);
   };
 
@@ -152,24 +140,18 @@ const SearchPage = () => {
               <ul className="space-y-2 ">
                 {shops.map((shop, idx) => (
                   <li key={idx} className="flex items-center gap-2">
-                    <div className="custom-checkbox">
-                      <input
-                        type="checkbox"
+                    <Checkbox.Group>
+                      <Checkbox
                         id={`checkbox-${shop.name}`}
+                        name="stockProduct"
                         checked={selectedShops.includes(shop.name)}
                         onChange={() => toggleShop(shop.name)}
+                        size={{ h: 4, w: 4 }}
                       />
-                      <label
-                        htmlFor={`checkbox-${shop.name}`}
-                        className="checkbox-label"
-                      ></label>
-                    </div>
-                    <label
-                      htmlFor={`checkbox-${shop.name}`}
-                      className="text-sm"
-                    >
-                      {shop.name}
-                    </label>
+                      <Checkbox.Label htmlFor={`checkbox-${shop.name}`}>
+                        {shop.name}
+                      </Checkbox.Label>
+                    </Checkbox.Group>
                   </li>
                 ))}
               </ul>
@@ -182,13 +164,13 @@ const SearchPage = () => {
                 <input
                   type="number"
                   value={minPrice}
-                  onChange={(e) => handleInputChange(e, 0)} // Update min price on change
+                  onChange={(e) => handleInputChange(e, 0)}
                   className="border p-2 md:w-20 w-16 rounded dark:bg-[#020817] dark:border dark:border-[#1e293b]"
                 />
                 <input
                   type="number"
                   value={maxPrice}
-                  onChange={(e) => handleInputChange(e, 1)} // Update max price on change
+                  onChange={(e) => handleInputChange(e, 1)}
                   className="border p-2 md:w-20 w-16 rounded dark:bg-[#020817] dark:border dark:border-[#1e293b]"
                 />
               </div>
@@ -237,15 +219,15 @@ const SearchPage = () => {
             {/* Availability Filter */}
             <div>
               <h4 className="font-semibold mb-2">Availability</h4>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className=""
+              <Checkbox.Group>
+                <Checkbox
+                  id="inStock"
+                  name="stockProduct"
                   checked={showInStockOnly}
-                  onChange={() => setShowInStockOnly(!showInStockOnly)}
+                  onChange={(e) => setShowInStockOnly(e.target.checked)}
                 />
-                <label className="">In Stock Only</label>
-              </div>
+                <Checkbox.Label htmlFor="inStock">In Stock Only</Checkbox.Label>
+              </Checkbox.Group>
             </div>
           </div>
         </div>
@@ -298,7 +280,6 @@ const SearchPage = () => {
                     );
                   }
 
-                  // The rest of your existing code for pagination will use the sorted 'products'
                   const isMobile = window.innerWidth < 768;
                   const page = currentPages[shop.name] || 1;
                   const perPage = isMobile ? 6 : 8;
@@ -310,7 +291,7 @@ const SearchPage = () => {
 
                   if (!products.length) return null;
 
-                  const staggerKey = `${shop.name}-page-${page}-sort-${currentShopSortOrder}-count-${paginatedProducts.length}`;
+                  const staggerKey = `${shop.name}-page-${page}-sort-${currentShopSortOrder}-count-${paginatedProducts.length}-${maxPrice}-${minPrice}-${showInStockOnly}`;
 
                   return (
                     <div key={idx} className="mb-12">
@@ -335,7 +316,6 @@ const SearchPage = () => {
                             />
                             <div className="flex items-center space-x-4 justify-between">
                               {" "}
-                              {/* Existing div */}
                               {paginatedProducts?.length ? (
                                 <p className="md:text-md text-xs text-gray-500">
                                   Showing {paginatedProducts?.length} of{" "}
@@ -345,15 +325,14 @@ const SearchPage = () => {
                                     : "product"}{" "}
                                 </p>
                               ) : null}
-                              {/* Updated Sort Dropdown */}
                               {products.length > 0 && (
                                 <select
-                                  value={sortOrders[shop.name] || "default"} // Get sort order for the current shop
+                                  value={sortOrders[shop.name] || "default"}
                                   onChange={(e) => {
                                     const newSortOrder = e.target.value;
                                     setSortOrders((prevSortOrders) => ({
                                       ...prevSortOrders,
-                                      [shop.name]: newSortOrder, // Set sort order for the specific shop
+                                      [shop.name]: newSortOrder,
                                     }));
                                     setCurrentPages((prev) => ({
                                       ...prev,
