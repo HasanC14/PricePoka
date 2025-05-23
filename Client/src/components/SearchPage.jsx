@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import SkeletonCard from "./SkeletonCard";
-import Card from "./Card";
 import { Range } from "react-range";
-import SearchBar from "./SearchBox";
-import skyland from "../assets/skyland.jpg";
+import { useLocation } from "react-router-dom";
 import binary from "../assets/binary.png";
+import skyland from "../assets/skyland.jpg";
+import Card from "./Card";
+import SearchBar from "./SearchBox";
+import SkeletonCard from "./SkeletonCard";
 import { StaggerChildren } from "./StaggerChildren";
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -310,6 +310,8 @@ const SearchPage = () => {
 
                   if (!products.length) return null;
 
+                  const staggerKey = `${shop.name}-page-${page}-sort-${currentShopSortOrder}-count-${paginatedProducts.length}`;
+
                   return (
                     <div key={idx} className="mb-12">
                       {/* Shop Logo */}
@@ -353,6 +355,10 @@ const SearchPage = () => {
                                       ...prevSortOrders,
                                       [shop.name]: newSortOrder, // Set sort order for the specific shop
                                     }));
+                                    setCurrentPages((prev) => ({
+                                      ...prev,
+                                      [shop.name]: 1,
+                                    }));
                                   }}
                                   className="p-2 border border-gray-300 rounded-md text-sm dark:bg-[#020817] dark:border-[#1e293b]"
                                 >
@@ -372,12 +378,13 @@ const SearchPage = () => {
 
                       {/* Products */}
                       <StaggerChildren
+                        key={staggerKey}
                         direction="up"
                         staggerDelay={0.15}
                         className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6"
                       >
                         {paginatedProducts.map((product, i) => (
-                          <Card key={i} product={product} />
+                          <Card key={product.id || i} product={product} />
                         ))}
                       </StaggerChildren>
 
