@@ -1,0 +1,15 @@
+{
+  "name": "PricePoka",
+  "short_name": "PricePoka",
+  "description": "Your app descriptionCompare PC part prices from all major sites in one place. Stay updated with the best deals.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "lang": "en",
+  "scope": "/",
+  "icons": [
+    { "src": "/logo-s.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/logo-l.jpg", "sizes": "512x512", "type": "image/png" }
+  ]
+}
