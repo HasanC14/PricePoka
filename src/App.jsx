@@ -6,6 +6,7 @@ import SearchPage from "./components/SearchPage";
 import Layout from "./layout/Layout.jsx";
 import "./App.css";
 import GamingPc from "./components/GamingPc.jsx";
+import Error from "./components/Error.jsx";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/compare" element={<ComparePage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/gaming-pc" element={<GamingPc />} />
+            <Route path="*" element={<Error />} />
           </Routes>
         </Layout>
       </CompareProvider>
