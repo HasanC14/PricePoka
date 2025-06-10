@@ -5,11 +5,11 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "theme_color": "#020817",
   "lang": "en",
   "scope": "/",
   "icons": [
     { "src": "/logo-s.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/logo-l.jpg", "sizes": "512x512", "type": "image/png" }
+    { "src": "/logo-l.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
