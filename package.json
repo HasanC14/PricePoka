@@ -13,6 +13,7 @@
     "@lottiefiles/dotlottie-react": "^0.13.2",
     "axios": "^1.7.2",
     "framer-motion": "^11.18.2",
+    "posthog-js": "^1.255.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
