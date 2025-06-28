@@ -211,7 +211,7 @@ const Navbar = () => {
               scale ? "transform scale-105 " : ""
             }`}
           >
-            <span className="mr-2">
+            <span className="md:mr-2 mr-0">
               <LuGitCompare className="text-xl" />
             </span>
             <span className="hidden md:block">Compare</span>
@@ -221,7 +221,7 @@ const Navbar = () => {
             to="/gaming-pc"
             className="md-hide inline-flex items-center border border-blue-600 text-blue-600 py-2 px-4 rounded-sm font-medium md:text-md text-sm transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white"
           >
-            <span className="mr-2">
+            <span className="md:mr-2 mr-0">
               <LuGamepad className="text-xl" />
             </span>
             <span className="hidden md:block">Gaming PCs</span>
