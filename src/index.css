@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* footer,
+.md-hide {
+  display: none;
+} */
+.bottom-nav {
+  display: none;
+}

@@ -7,6 +7,7 @@ import Card from "./Card";
 import SearchBar from "./SearchBox";
 import SkeletonCard from "./SkeletonCard";
 import { StaggerChildren } from "./StaggerChildren";
+import { LuFilter } from "react-icons/lu";
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -253,16 +254,16 @@ const SearchPage = () => {
         {/* Filter Button for Mobile */}
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-md shadow-lg z-20"
+          className="md:hidden fixed bottom-20 right-6 bg-blue-600 text-white p-4 rounded-md shadow-lg z-20"
         >
-          Filter
+          <LuFilter className="2xl" />
         </button>
 
         {/* Product Section */}
         <div className="col-span-12 md:col-span-9 w-full">
           {error && <div className="text-red-500 mb-4">{error}</div>}
           {shops.length === 0 && !isLoading && (
-            <div className="col-span-12 text-center text-gray-500">
+            <div className="col-span-12 text-center text-gray-500" key={shops}>
               No products found for this search.
             </div>
           )}
@@ -400,7 +401,7 @@ const SearchPage = () => {
                                   [shop.name]: i + 1,
                                 }))
                               }
-                              className={`px-3 py-1 border text-gray-500  dark:border-[#1e293b] rounded-full ${
+                              className={`px-3 py-1 border text-gray-500  dark:border-[#1e293b] rounded-full flex-wrap${
                                 page === i + 1
                                   ? "bg-blue-600  text-white"
                                   : "hover:bg-blue-600 hover:text-white"

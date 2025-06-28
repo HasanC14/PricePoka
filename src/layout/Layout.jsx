@@ -1,5 +1,6 @@
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import BottomNavbar from "../components/BottomNavbar";
 
 function Layout({ children }) {
   return (
@@ -7,6 +8,9 @@ function Layout({ children }) {
       <Navbar />
       <div className="flex flex-grow">{children}</div>
       <Footer />
+      <div>
+        <BottomNavbar />
+      </div>
     </div>
   );
 }

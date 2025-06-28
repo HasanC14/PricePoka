@@ -4,6 +4,7 @@ import SkeletonCard from "./SkeletonCard";
 import Card from "./Card";
 import { Range } from "react-range";
 import { StaggerChildren } from "./StaggerChildren";
+import { LuFilter } from "react-icons/lu";
 
 const GamingPc = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +55,7 @@ const GamingPc = () => {
             products: val.products,
           }));
           setShops(shopsData);
-          setSelectedShops(shopsData.map((shop) => shop.name)); // select all by default
+          setSelectedShops(shopsData.map((shop) => shop.name));
         } else {
           setError("Failed to load data");
         }
@@ -86,15 +87,6 @@ const GamingPc = () => {
     if (index === 0)
       setPriceRange([Math.min(val, priceRange[1]), priceRange[1]]);
     else setPriceRange([priceRange[0], Math.max(val, priceRange[0])]);
-  };
-
-  // Helper to check if product matches CPU build filter
-  const matchesCpuFilter = (name) => {
-    const lowerName = name.toLowerCase();
-    if (!filterAMD && !filterIntel) return true; // no cpu filter active
-    if (filterAMD && lowerName.includes("amd")) return true;
-    if (filterIntel && lowerName.includes("intel")) return true;
-    return false;
   };
 
   return (
@@ -242,17 +234,16 @@ const GamingPc = () => {
         {/* Filter Button for Mobile */}
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-md shadow-lg z-20"
-          aria-label="Toggle Filters"
+          className="md:hidden fixed bottom-20 right-6 bg-blue-600 text-white p-4 rounded-md shadow-lg z-20"
         >
-          Filter
+          <LuFilter className="2xl" />
         </button>
 
         {/* Product Section */}
         <div className="col-span-12 md:col-span-9 w-full">
           {error && <div className="text-red-500 mb-4">{error}</div>}
           {shops.length === 0 && !isLoading && (
-            <div className="col-span-12 text-center text-gray-500">
+            <div className="col-span-12 text-center text-gray-500" key={shops}>
               No products found.
             </div>
           )}
@@ -381,7 +372,7 @@ const GamingPc = () => {
 
                       {/* Pagination */}
                       {totalPages > 1 && (
-                        <div className="flex justify-center mt-4 gap-2">
+                        <div className="flex justify-center mt-4 gap-2 flex-wrap">
                           {Array.from({ length: totalPages }, (_, i) => (
                             <button
                               key={i}
