@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import { useCompare } from "../context/CompareContext";
 import { useState, useEffect } from "react";
-import { LuMoonStar, LuSun, LuGitCompare, LuGamepad } from "react-icons/lu";
+import {
+  LuMoonStar,
+  LuSun,
+  LuGitCompare,
+  LuGamepad,
+  LuDownload,
+} from "react-icons/lu";
 
 function useDarkMode() {
   useEffect(() => {
@@ -198,34 +204,43 @@ const Navbar = () => {
           {isDark ? darkLogo : lightLogo}
         </Link>
         <div className="flex gap-4 items-center ">
-          <button
-            className=" rounded-full p-2  border dark:border-[#1e293b] border-gray-300 flex items-center transition duration-300 text-gray-500 text-xl  hover:text-white hover:bg-blue-600"
-            onClick={handleToggle}
-          >
-            {isDark ? <LuMoonStar /> : <LuSun />}
-          </button>
-
           <Link
             to="/compare"
-            className={`md-hide inline-flex items-center border border-blue-600 text-blue-600 py-2 px-4 rounded-sm font-medium md:text-md text-sm transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white  ${
+            className={`md-hide inline-flex items-center border border-blue-600 text-blue-600 md:py-2 py-1 md:px-4 px-2 rounded-sm font-medium md:text-md text-sm transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white  ${
               scale ? "transform scale-105 " : ""
             }`}
           >
             <span className="md:mr-2 mr-0">
-              <LuGitCompare className="text-xl" />
+              <LuGitCompare className="md:text-xl text-sm" />
             </span>
             <span className="hidden md:block">Compare</span>
             {compareList.length > 0 && `(${compareList.length})`}
           </Link>
           <Link
             to="/gaming-pc"
-            className="md-hide inline-flex items-center border border-blue-600 text-blue-600 py-2 px-4 rounded-sm font-medium md:text-md text-sm transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white"
+            className="md-hide inline-flex items-center border border-blue-600 text-blue-600 md:py-2 py-1 md:px-4 px-2 rounded-sm font-medium md:text-md text-sm transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white"
           >
             <span className="md:mr-2 mr-0">
-              <LuGamepad className="text-xl" />
+              <LuGamepad className="md:text-xl text-sm" />
             </span>
             <span className="hidden md:block">Gaming PCs</span>
           </Link>
+          <a
+            target="_blank"
+            href="https://drive.google.com/uc?export=download&id=17feGYATD9kOJpPhCqoGdjNSHj1rOsmBS"
+            className="md-hide inline-flex items-center border border-blue-600 text-blue-600 md:py-2 py-1 md:px-4 px-2 rounded-sm font-medium md:text-md text-sm transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white"
+          >
+            <span className="md:mr-2 mr-0">
+              <LuDownload className="md:text-xl text-sm" />
+            </span>
+            <span className="hidden md:block">Download App</span>
+          </a>
+          <button
+            className=" rounded-full p-2  border dark:border-[#1e293b] border-gray-300 flex items-center transition duration-300 text-gray-500 text-xl  hover:text-white hover:bg-blue-600"
+            onClick={handleToggle}
+          >
+            {isDark ? <LuMoonStar /> : <LuSun />}
+          </button>
         </div>
       </div>
     </nav>
