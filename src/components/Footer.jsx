@@ -23,6 +23,7 @@ export default function Footer() {
               <a
                 href="https://github.com/HasanC14/PricePoka"
                 className="hover:text-blue-600 me-2 flex items-center"
+                target="_blank"
               >
                 <LuGithub />
               </a>
@@ -31,6 +32,7 @@ export default function Footer() {
               <a
                 href="https://www.facebook.com/dev.hasanchowdhury"
                 className="hover:text-blue-600 me-2 flex items-center"
+                target="_blank"
               >
                 <LuFacebook />
               </a>
@@ -39,6 +41,7 @@ export default function Footer() {
               <a
                 href="https://www.linkedin.com/in/dev1hasanchowdhury/"
                 className="hover:text-blue-600 flex items-center"
+                target="_blank"
               >
                 <LuLinkedin />
               </a>

@@ -24,7 +24,7 @@ function HomePage() {
       <main className="">
         <SearchBar />
       </main>
-      <Ad />
+      {/* <Ad /> */}
     </StaggerChildren>
   );
 }

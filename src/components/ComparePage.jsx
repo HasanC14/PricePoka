@@ -85,7 +85,7 @@ export default function ComparePage() {
       <h1 className="md:text-4xl text-2xl text-black dark:text-gray-100  mb-4">
         Compare
       </h1>
-      <Ad />
+      {/* <Ad /> */}
       {/* <button
         onClick={() => removeAllFromCompare()}
         className="fixed flex items-center gap-2 bottom-4 right-48 lg:right-64  text-white lg:text-xl md:text-md text-sm z-10 transition-all ease-in-out duration-700 cursor-pointer gradient-btn text p-4 rounded-lg"

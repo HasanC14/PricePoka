@@ -1,4 +1,3 @@
-import React from "react";
 import ad from "../assets/3.webp";
 import m_ad from "../assets/m.webp";
 const Ad = () => {
