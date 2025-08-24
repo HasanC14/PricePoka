@@ -50,7 +50,7 @@ const SearchPage = () => {
     setError(null);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_LOCAL_URL}/scrape/${searchInput}`
+        `${import.meta.env.VITE_API_BASE_URL}/scrape/${searchInput}`
       );
       if (!response.ok) {
         throw new Error("Fetch failed");
