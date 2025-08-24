@@ -50,7 +50,7 @@ const SearchPage = () => {
     setError(null);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/scrape/${searchInput}`
+        `${import.meta.env.VITE_API_LOCAL_URL}/scrape/${searchInput}`
       );
       if (!response.ok) {
         throw new Error("Fetch failed");
@@ -130,6 +130,38 @@ const SearchPage = () => {
       setValues([minPrice, Math.max(newValue, minPrice)]);
     }
   };
+  // max how many numbered buttons to show (excluding Prev/Next)
+  const MAX_BUTTONS = 5;
+
+  // Build a compact list of page items: [1, '…', 7, 8, 9, '…', 20]
+  function getPageItems(current, total, maxButtons = MAX_BUTTONS) {
+    if (total <= maxButtons) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const items = [];
+    const first = 1;
+    const last = total;
+
+    // Start with a small window around the current page
+    let left = Math.max(2, current - 1);
+    let right = Math.min(total - 1, current + 1);
+
+    // Expand the window until we fill maxButtons - 2 (excluding first & last)
+    while (right - left + 1 < maxButtons - 2) {
+      if (left > 2) left--;
+      else if (right < total - 1) right++;
+      else break;
+    }
+
+    items.push(first);
+    if (left > 2) items.push("…");
+    for (let i = left; i <= right; i++) items.push(i);
+    if (right < total - 1) items.push("…");
+    items.push(last);
+
+    return items;
+  }
 
   return (
     <div className="px-4 py-8 grid grid-cols-12 gap-6 max-w-7xl w-full mx-auto dark:text-gray-100">
@@ -263,7 +295,7 @@ const SearchPage = () => {
         <div className="col-span-12 md:col-span-9 w-full">
           {error && <div className="text-red-500 mb-4">{error}</div>}
           {shops.length === 0 && !isLoading && (
-            <div className="col-span-12 text-center text-gray-500" key={shops}>
+            <div className="col-span-12 text-center text-gray-500">
               No products found for this search.
             </div>
           )}
@@ -391,25 +423,71 @@ const SearchPage = () => {
 
                       {/* Pagination */}
                       {totalPages > 1 && (
-                        <div className="flex justify-center mt-4 gap-2">
-                          {Array.from({ length: totalPages }, (_, i) => (
-                            <button
-                              key={i}
-                              onClick={() =>
-                                setCurrentPages((prev) => ({
-                                  ...prev,
-                                  [shop.name]: i + 1,
-                                }))
-                              }
-                              className={`px-3 py-1 border text-gray-500  dark:border-[#1e293b] rounded-full flex-wrap${
-                                page === i + 1
-                                  ? "bg-blue-600  text-white"
-                                  : "hover:bg-blue-600 hover:text-white"
-                              }`}
-                            >
-                              {i + 1}
-                            </button>
-                          ))}
+                        <div className="flex justify-center mt-4 gap-2 items-center">
+                          {/* Prev */}
+                          <button
+                            onClick={() =>
+                              setCurrentPages((prev) => ({
+                                ...prev,
+                                [shop.name]: Math.max(1, page - 1),
+                              }))
+                            }
+                            disabled={page === 1}
+                            className={`px-3 py-1 border text-gray-500 dark:border-[#1e293b] rounded-full ${
+                              page === 1
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:bg-blue-600 hover:text-white"
+                            }`}
+                          >
+                            Prev
+                          </button>
+
+                          {/* Numbered buttons with ellipsis */}
+                          {getPageItems(page, totalPages).map((item, i) =>
+                            item === "…" ? (
+                              <span
+                                key={`ellipsis-${i}`}
+                                className="px-3 py-1 text-gray-500"
+                              >
+                                …
+                              </span>
+                            ) : (
+                              <button
+                                key={`pg-${item}`}
+                                onClick={() =>
+                                  setCurrentPages((prev) => ({
+                                    ...prev,
+                                    [shop.name]: item,
+                                  }))
+                                }
+                                className={`px-3 py-1 border text-gray-500 dark:border-[#1e293b] rounded-full ${
+                                  page === item
+                                    ? "bg-blue-600 text-white"
+                                    : "hover:bg-blue-600 hover:text-white"
+                                }`}
+                              >
+                                {item}
+                              </button>
+                            )
+                          )}
+
+                          {/* Next */}
+                          <button
+                            onClick={() =>
+                              setCurrentPages((prev) => ({
+                                ...prev,
+                                [shop.name]: Math.min(totalPages, page + 1),
+                              }))
+                            }
+                            disabled={page === totalPages}
+                            className={`px-3 py-1 border text-gray-500 dark:border-[#1e293b] rounded-full ${
+                              page === totalPages
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:bg-blue-600 hover:text-white"
+                            }`}
+                          >
+                            Next
+                          </button>
                         </div>
                       )}
                     </div>
