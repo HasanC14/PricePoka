@@ -63,4 +63,4 @@ Found a bug or want to suggest a feature? Feel free to open an issue or submit a
 
 ---
 
-Made with 💻 and ☕ by [Hasan](https://hasan-chowdhury.netlify.app/)
+Made with 💻 and ☕ by [Hasan](https://www.hasanbuilds.com/)
